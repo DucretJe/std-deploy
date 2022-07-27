@@ -1,9 +1,20 @@
-# Repository template
+# Deployments toolbox
 
-## Features
+* We will use [Terraform Cloud](https://app.terraform.io)
 
-The repository is spawned with
+## AWS
 
-* Renovate config file
-* Super Linter that runs on every push
-* Checkov that runs on PR or push on Main when in /terraform or workflow file
+[Provider documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+
+### Authentication
+
+* In AWS console
+  * Go to IAM
+    * Access Key
+    * Create an Access Key
+* Define the following `environment variables`:
+  * `AWS_ACCESS_KEY_ID`
+  * `AWS_SECRET_ACCESS_KEY`
+  * `AWS_REGION`
+
+> Closest region from CH is `eu-central-1`
