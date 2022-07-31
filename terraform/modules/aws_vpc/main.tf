@@ -74,9 +74,16 @@ module "cloudwatch_group" {
   source = "../aws_cloudwatch_group/"
 }
 
+resource "aws_cloudwatch_log_group" "cloudwatch_log_group" {
+  name              = "test"
+  retention_in_days = 90
+}
+
 module "iam_role_log" {
   source = "../aws_iam_role"
 
+  iam_role_name = "vpc-flow-logger"
+  iam_role_description = "Role allowed to create log group and pull in it"
   iam_role_assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -107,6 +114,44 @@ module "iam_role_log" {
     ]
   })
 }
+
+resource "aws_iam_role" "iam_role" {
+  name        = "test"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = ""
+        Effect = "Allow"
+        Principal = {
+          Service = "vpc-flow-logs.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "iam_role_policy" {
+  name        = "test"
+  role        = aws_iam_role.iam_role.id
+
+  policy = vjsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = ""
+        Effect = "Allow"
+        Principal = {
+          Service = "vpc-flow-logs.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
 
 resource "aws_flow_log" "flow_log" {
   # Ensure AWS VPC Flow logs are enabled
