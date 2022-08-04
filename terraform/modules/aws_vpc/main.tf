@@ -77,6 +77,7 @@ module "cloudwatch_group" {
 resource "aws_cloudwatch_log_group" "cloudwatch_log_group" {
   name              = "test"
   retention_in_days = 90
+  kms_key_id = aws_kms_key.a.key_id
 }
 
 module "iam_role_log" {
