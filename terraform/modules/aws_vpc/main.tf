@@ -141,12 +141,15 @@ resource "aws_iam_role_policy" "iam_role_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid    = ""
-        Effect = "Allow"
-        Principal = {
-          Service = "vpc-flow-logs.amazonaws.com"
-        }
-        Action = "sts:AssumeRole"
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:DescribeLogGroups",
+          "logs:DescribeLogStreams"
+        ]
+        Effect   = "Allow"
+        Resource = "*"
       }
     ]
   })
