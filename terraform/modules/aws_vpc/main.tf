@@ -171,30 +171,34 @@ resource "aws_flow_log" "flow_log" {
   vpc_id          = aws_vpc.vpc.id
 }
 
-resource "aws_kms_key" "a" {
-  description             = "test"
-  deletion_window_in_days = 7
-  enable_key_rotation = true
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        sid       = "Enable IAM User Permissions"
-        effect    = "Allow"
-        actions   = [
-          "kms:Encrypt",
-          "kms:Decrypt",
-          "kms:ReEncrypt*",
-          "kms:GenerateDataKey*",
-          "kms:DescribeKey"
-        ]
-        resources = ["*"]
+# resource "aws_kms_key" "a" {
+#   description             = "test"
+#   deletion_window_in_days = 7
+#   enable_key_rotation = true
+#   policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [
+#       {
+#         sid       = "Enable IAM User Permissions"
+#         effect    = "Allow"
+#         actions   = [
+#           "kms:Encrypt",
+#           "kms:Decrypt",
+#           "kms:ReEncrypt*",
+#           "kms:GenerateDataKey*",
+#           "kms:DescribeKey"
+#         ]
+#         resources = ["*"]
 
-        principals = {
-          type        = "AWS"
-          identifiers = ["${local.account_arn}"]
-        }
-      }
-    ]
-  })
+#         principals = {
+#           type        = "AWS"
+#           identifiers = ["${local.account_arn}"]
+#         }
+#       }
+#     ]
+#   })
+# }
+
+output "test" {
+  value = local.account_arn
 }
