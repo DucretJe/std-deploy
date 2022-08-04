@@ -1,5 +1,5 @@
 locals {
-  account_id     = data.aws_caller_identity.current.account_id
+  account_arn     = data.aws_caller_identity.current.arn
 }
 
 data "aws_region" "current" {}
@@ -182,16 +182,23 @@ resource "aws_kms_key" "a" {
         Sid       = "Enable IAM User Permissions"
         Effect    = "Allow"
         Action   = [
-          "kms:Encrypt",
-          "kms:Decrypt",
-          "kms:ReEncrypt*",
-          "kms:GenerateDataKey*",
-          "kms:DescribeKey"
+          "kms:Create*",
+          "kms:Describe*",
+          "kms:Enable*",
+          "kms:List*",
+          "kms:Put*",
+          "kms:Update*",
+          "kms:Revoke*",
+          "kms:Disable*",
+          "kms:Get*",
+          "kms:Delete*",
+          "kms:ScheduleKeyDeletion",
+          "kms:CancelKeyDeletion"
         ]
         Resource = ["*"]
 
         Principal = {
-          AWS        = "arn:aws:iam::${local.account_id}:root"
+          AWS        = local.account_arn
         }
       }
     ]
