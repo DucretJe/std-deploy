@@ -179,8 +179,8 @@ resource "aws_kms_key" "a" {
     Version = "2012-10-17"
     Statement = [
       {
-        sid       = "Enable IAM User Permissions"
-        effect    = "Allow"
+        Sid       = "Enable IAM User Permissions"
+        Effect    = "Allow"
         Action   = [
           "kms:Encrypt",
           "kms:Decrypt",
@@ -188,9 +188,9 @@ resource "aws_kms_key" "a" {
           "kms:GenerateDataKey*",
           "kms:DescribeKey"
         ]
-        resources = ["*"]
+        Resource = ["*"]
 
-        principals = {
+        Principal = {
           type        = "AWS"
           identifiers = ["${local.account_arn}"]
         }
