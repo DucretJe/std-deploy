@@ -1,10 +1,6 @@
 locals {
-  account_id     = data.aws_caller_identity.current.account_id
+  account_arn     = data.aws_caller_identity.current.arn
 }
-
-output "test" {
-  value = local.account_id
-} 
 
 data "aws_region" "current" {}
 
@@ -196,7 +192,7 @@ resource "aws_kms_key" "a" {
 
         principals = {
           type        = "AWS"
-          identifiers = ["arn:aws:iam::${local.account_id}:root"]
+          identifiers = ["${local.account_arn}"]
         }
       }
     ]
