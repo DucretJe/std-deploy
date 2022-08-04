@@ -1,4 +1,11 @@
+locals {
+  account_id     = data.aws_caller_identity.current.account_id
+}
+
+
 data "aws_region" "current" {}
+
+data "aws_caller_identity" "current" {}
 
 resource "aws_vpc_ipam" "vpc_ipam" {
   operating_regions {
@@ -167,6 +174,28 @@ resource "aws_flow_log" "flow_log" {
 
 resource "aws_kms_key" "a" {
   description             = "test"
-  deletion_window_in_days = 0
+  deletion_window_in_days = 7
   enable_key_rotation = true
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        sid       = "Enable IAM User Permissions"
+        effect    = "Allow"
+        actions   = [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*",
+          "kms:DescribeKey"
+        ]
+        resources = ["*"]
+
+        principals = {
+          type        = "AWS"
+          identifiers = ["arn:aws:iam::${local.account_id}:root"]
+        }
+      }
+    ]
+  })
 }
