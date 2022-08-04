@@ -175,30 +175,27 @@ resource "aws_kms_key" "a" {
   description             = "hu?"
   deletion_window_in_days = 7
   enable_key_rotation = true
-  # policy = jsonencode({
-  #   Version = "2012-10-17"
-  #   Statement = [
-  #     {
-  #       sid       = "Enable IAM User Permissions"
-  #       effect    = "Allow"
-  #       actions   = [
-  #         "kms:Encrypt",
-  #         "kms:Decrypt",
-  #         "kms:ReEncrypt*",
-  #         "kms:GenerateDataKey*",
-  #         "kms:DescribeKey"
-  #       ]
-  #       resources = ["*"]
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        sid       = "Enable IAM User Permissions"
+        effect    = "Allow"
+        actions   = [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*",
+          "kms:DescribeKey"
+        ]
+        resources = ["*"]
 
-  #       principals = {
-  #         type        = "AWS"
-  #         identifiers = ["${local.account_arn}"]
-  #       }
-  #     }
-  #   ]
-  # })
+        principals = {
+          type        = "AWS"
+          identifiers = ["${local.account_arn}"]
+        }
+      }
+    ]
+  })
 }
 
-output "test" {
-  value = local.account_arn
-}
