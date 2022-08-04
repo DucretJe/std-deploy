@@ -181,7 +181,7 @@ resource "aws_kms_key" "a" {
       {
         sid       = "Enable IAM User Permissions"
         effect    = "Allow"
-        actions   = [
+        Action   = [
           "kms:Encrypt",
           "kms:Decrypt",
           "kms:ReEncrypt*",
