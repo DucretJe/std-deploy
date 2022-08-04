@@ -172,7 +172,7 @@ resource "aws_flow_log" "flow_log" {
 }
 
 resource "aws_kms_key" "a" {
-  description             = "test"
+  description             = "hu?"
   deletion_window_in_days = 7
   enable_key_rotation = true
   # policy = jsonencode({
