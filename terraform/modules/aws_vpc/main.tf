@@ -199,6 +199,7 @@ resource "aws_kms_key" "a" {
 
         Principal = {
           AWS        = local.account_arn
+          Service = "vpc-flow-logs.amazonaws.com"
         }
       }
     ]
