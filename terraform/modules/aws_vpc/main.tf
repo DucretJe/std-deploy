@@ -163,3 +163,8 @@ resource "aws_flow_log" "flow_log" {
   traffic_type    = "ALL"
   vpc_id          = aws_vpc.vpc.id
 }
+
+resource "aws_kms_key" "a" {
+  description             = "test"
+  deletion_window_in_days = 0
+}
