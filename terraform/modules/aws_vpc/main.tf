@@ -191,8 +191,7 @@ resource "aws_kms_key" "a" {
         Resource = ["*"]
 
         Principal = {
-          type        = "AWS"
-          identifiers = ["${local.account_arn}"]
+          AWS        = local.account_arn
         }
       }
     ]
