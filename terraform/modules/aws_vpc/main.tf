@@ -168,4 +168,5 @@ resource "aws_flow_log" "flow_log" {
 resource "aws_kms_key" "a" {
   description             = "test"
   deletion_window_in_days = 0
+  enable_key_rotation = true
 }

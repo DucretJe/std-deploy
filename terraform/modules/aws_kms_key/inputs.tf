@@ -42,7 +42,7 @@ variable "kms_key_is_enabled" {
 variable "kms_key_enable_key_rotation" {
   description = "Specifies whether key rotation is enabled"
   type = bool
-  default = false
+  default = true
 }
 
 variable "kms_key_multi_region" {
