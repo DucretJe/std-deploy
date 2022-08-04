@@ -198,8 +198,7 @@ resource "aws_kms_key" "a" {
         Resource = ["*"]
 
         Principal = {
-          AWS        = local.account_arn
-          Service = "vpc-flow-logs.amazonaws.com"
+          AWS        = [local.account_arn, module.cloudwatch_group.arn]
         }
       }
     ]
