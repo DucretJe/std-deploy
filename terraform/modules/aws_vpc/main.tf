@@ -137,7 +137,7 @@ resource "aws_iam_role_policy" "iam_role_policy" {
   name        = "test"
   role        = aws_iam_role.iam_role.id
 
-  policy = vjsonencode({
+  policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
