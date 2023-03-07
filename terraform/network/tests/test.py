@@ -21,7 +21,7 @@ def test_vpc_exists(region_name, vpc_id):
     try:
         response = ec2_client.describe_vpcs(VpcIds=[vpc_id])
     except ec2_client.exceptions.ClientError as e:
-        if e.response['Error']['Code'] == 'InvalidVpcID.NotFound':
+        if e.response["Error"]["Code"] == "InvalidVpcID.NotFound":
             # Si le VPC n'existe pas, le test échoue
             print("VPC {vpc_id} does not exist")
             assert False, f"VPC {vpc_id} does not exist"
@@ -33,6 +33,7 @@ def test_vpc_exists(region_name, vpc_id):
     # Si la réponse contient un VPC, le test réussit
     print(f"VPC {vpc_id} exists")
     assert len(response["Vpcs"]) == 1, f"VPC {vpc_id} does not exist"
+
 
 if __name__ == "__main__":
     args = parse_args()

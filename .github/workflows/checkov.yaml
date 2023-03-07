@@ -1,5 +1,5 @@
 ---
-name: "Checkov - Terraform"
+name: "💫 Checkov - Terraform"
 
 on:
   push:
@@ -17,7 +17,7 @@ on:
 concurrency: ci-${{ github.ref }}
 jobs:
   checkov:
-      name: super-linter
+      name: 💫 super-linter
       runs-on: ubuntu-22.04
       steps:
       - name: Checkout

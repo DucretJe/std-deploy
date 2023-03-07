@@ -11,7 +11,7 @@ on:
 concurrency: ci-${{ github.ref }}
 jobs:
   terraform:
-    name: Terraform
+    name: 🚀 Terraform
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
