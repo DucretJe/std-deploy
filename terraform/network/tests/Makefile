@@ -16,7 +16,7 @@ test:
 	terraform apply --auto-approve && \
 	cd .. && \
 	python3 -m venv .venv && \
-	source .venv/bin/activate && \
+	. .venv/bin/activate && \
 	pip install -r requirements.txt && \
 	python3 test.py --region ${AWS_REGION} --vpc-id $$(cd 01-network && terraform output vpc_id | sed 's/"//g') && \
 	cd 01-network && \
