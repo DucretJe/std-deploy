@@ -1,0 +1,26 @@
+---
+name: "🚀 Terraform"
+
+on:
+  pull_request:
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/terraform.yaml'
+  workflow_dispatch: # Allow to manually trigger the pipeline
+
+concurrency: ci-${{ github.ref }}
+jobs:
+  terraform:
+    name: 🚀 Terraform
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Make Plan
+        run: make all
+        working-directory: terraform/network/tests
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: eu-central-1

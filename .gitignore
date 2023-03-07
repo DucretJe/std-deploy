@@ -2,3 +2,8 @@
 
 **/.terraform
 **/.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+
+# Python
+.venv

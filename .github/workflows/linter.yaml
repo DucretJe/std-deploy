@@ -1,12 +1,12 @@
 ---
-name: "Super-Linter"
+name: "✨ Super-Linter"
 
 on:
   push:
 
 jobs:
   linting:
-    name: super-linter
+    name: ✨ super-linter
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout Code
