@@ -60,7 +60,9 @@ def test_security_group_exists(region_name, security_group_id):
 
     # Si la réponse contient un groupe de sécurité, le test réussit
     print(f"Security group {security_group_id} exists")
-    assert len(response["SecurityGroups"]) == 1, f"Security group {security_group_id} does not exist"
+    assert (
+        len(response["SecurityGroups"]) == 1
+    ), f"Security group {security_group_id} does not exist"
 
 
 if __name__ == "__main__":
