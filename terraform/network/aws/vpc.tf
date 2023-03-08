@@ -59,6 +59,4 @@ resource "aws_iam_role_policy" "vpc_logs" {
   name   = "vpc-logs"
   role   = aws_iam_role.vpc_logs.id
   policy = data.aws_iam_policy_document.vpc_logs.json
-
-  tags = var.vpc_tags
 }
