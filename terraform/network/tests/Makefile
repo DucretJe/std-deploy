@@ -18,7 +18,8 @@ test:
 	python3 -m venv .venv && \
 	. .venv/bin/activate && \
 	pip install -r requirements.txt && \
-	python3 test.py --region ${AWS_REGION} --vpc-id $$(cd 01-network && terraform output vpc_id | sed 's/"//g') && \
+	python3 test.py --region ${AWS_REGION} --vpc-id $$(cd 01-network && terraform output vpc_id | sed 's/"//g') \
+	--security-group-id $$(cd 01-network && terraform output sg_id | sed 's/"//g') && \
 	cd 01-network && \
 	terraform destroy --auto-approve && \
 	echo "01-network: OK"
