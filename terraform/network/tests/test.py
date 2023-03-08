@@ -50,7 +50,9 @@ def test_security_group_exists(region_name, security_group_id):
         if e.response["Error"]["Code"] == "InvalidGroupId.NotFound":
             # Si le groupe de sécurité n'existe pas, le test échoue
             print(f"Security group {security_group_id} does not exist")
-            assert False, f"Security group {security_group_id} does not exist"
+            assert (
+                len(response["SecurityGroups"]) == 1
+            ), f"Security group {security_group_id} does not exist"
         else:
             # Si une erreur autre que "Group not found" se produit, le test échoue
             print(f"An error occurred: {e}")
@@ -64,4 +66,6 @@ def test_security_group_exists(region_name, security_group_id):
 if __name__ == "__main__":
     args = parse_args()
     test_vpc_exists(region_name=args.region, vpc_id=args.vpc_id)
-    test_security_group_exists(region_name=args.region, security_group_id=args.security_group_id)
+    test_security_group_exists(
+        region_name=args.region, security_group_id=args.security_group_id
+    )

@@ -7,7 +7,7 @@ This module is responsible of the network deployment in AWS
 
 ### Test
 
-> ⚠️ You need to have python3 installed on you laptop to run the tests. 
+> ⚠️ You need to have python3 installed on you laptop to run the tests.
 
 In `terraform/network/tests` there is a `makefile` that can be used to test the module.
 
@@ -16,7 +16,7 @@ In `terraform/network/tests` there is a `makefile` that can be used to test the 
 
 The `make all` test is used by the CI and should success for a PR to be considered to be mergeable.
 
- 
+
 > 🔑  In order to allow Terraform to run agains AWS you also need to provide the following env vars:
 > * `export AWS_REGION=<REGION>`
 > * `export AWS_SECRET_ACCESS_KEY=<SECRET_ACCESS_KEY>`
