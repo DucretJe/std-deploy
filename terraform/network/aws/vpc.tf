@@ -15,6 +15,7 @@ resource "aws_flow_log" "vpc_logs" {
 
 resource "aws_cloudwatch_log_group" "vpc_logs" {
   name = "vpc-logs"
+  retention_in_days = 30
 
   tags = var.vpc_tags
 }
