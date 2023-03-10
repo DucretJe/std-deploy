@@ -3,7 +3,6 @@ import argparse
 import boto3
 
 
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--region", required=True, help="AWS region")
@@ -38,7 +37,9 @@ def test_security_group_exists(region_name, security_group_id):
         session = boto3.Session()
         ec2_client = session.client("ec2", region_name=region_name)
         response = ec2_client.describe_security_groups(GroupIds=[security_group_id])
-        assert len(response["SecurityGroups"]) == 1, f"Security group {security_group_id} does not exist"
+        assert (
+            len(response["SecurityGroups"]) == 1
+        ), f"Security group {security_group_id} does not exist"
         print(f"Security group {security_group_id} exists")
     except Exception as e:
         raise TestFailed(f"Failed to test security group {security_group_id}: {e}")
@@ -62,7 +63,7 @@ if __name__ == "__main__":
     test_cases = [
         (test_vpc_exists, [args.region, args.vpc_id]),
         (test_security_group_exists, [args.region, args.security_group_id]),
-        (test_subnets_exist, [args.region, args.vpc_id, args.subnet_ids])
+        (test_subnets_exist, [args.region, args.vpc_id, args.subnet_ids]),
     ]
 
     has_errors = False
