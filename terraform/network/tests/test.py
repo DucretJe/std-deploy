@@ -5,21 +5,9 @@ import boto3
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--region",
-        required=True,
-        help="AWS region"
-    )
-    parser.add_argument(
-        "--vpc-id",
-        required=True,
-        help="VPC ID"
-    )
-    parser.add_argument(
-        "--security-group-id",
-        required=True,
-        help="Security group ID"
-    )
+    parser.add_argument("--region", required=True, help="AWS region")
+    parser.add_argument("--vpc-id", required=True, help="VPC ID")
+    parser.add_argument("--security-group-id", required=True, help="Security group ID")
     parser.add_argument(
         "--subnet-ids",
         required=True,
@@ -85,12 +73,16 @@ def test_security_group_exists(region_name, security_group_id):
         len(response["SecurityGroups"]) == 1
     ), f"Security group {security_group_id} does not exist"
 
+
 def test_subnets_exist(region_name, vpc_id, subnet_ids):
     # Create a Boto3 session
     session = boto3.Session()
 
     # Specify the AWS region you want to check
     ec2_client = session.client("ec2", region_name=region_name)
+    
+    # Initiate the response variable
+    response = {}
 
     # Use the method describe_subnets to get the subnet information
     try:
@@ -115,11 +107,12 @@ def test_subnets_exist(region_name, vpc_id, subnet_ids):
     assert len(subnet_ids) == len(subnet_ids_in_aws), f"Not all subnets exist"
 
 
-
 if __name__ == "__main__":
     args = parse_args()
     test_vpc_exists(region_name=args.region, vpc_id=args.vpc_id)
     test_security_group_exists(
         region_name=args.region, security_group_id=args.security_group_id
     )
-    test_subnets_exist(region_name=args.region, vpc_id=args.vpc_id, subnet_ids=args.subnet_ids)
+    test_subnets_exist(
+        region_name=args.region, vpc_id=args.vpc_id, subnet_ids=args.subnet_ids
+    )
