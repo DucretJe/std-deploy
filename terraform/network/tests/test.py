@@ -16,8 +16,10 @@ def parse_args():
     )
     return parser.parse_args()
 
+
 class TestFailed(Exception):
     pass
+
 
 def test_vpc_exists(region_name, vpc_id):
     try:
@@ -28,6 +30,7 @@ def test_vpc_exists(region_name, vpc_id):
         print(f"VPC {vpc_id} exists")
     except Exception as e:
         raise TestFailed(f"Failed to test VPC {vpc_id}: {e}")
+
 
 def test_security_group_exists(region_name, security_group_id):
     try:
@@ -41,6 +44,7 @@ def test_security_group_exists(region_name, security_group_id):
     except Exception as e:
         raise TestFailed(f"Failed to test security group {security_group_id}: {e}")
 
+
 def test_subnets_exist(region_name, vpc_id, subnet_ids):
     try:
         session = boto3.Session()
@@ -52,6 +56,7 @@ def test_subnets_exist(region_name, vpc_id, subnet_ids):
     except Exception as e:
         raise TestFailed(f"Failed to test subnets: {e}")
 
+
 def run_test(test_func, test_args):
     try:
         test_func(*test_args)
@@ -59,6 +64,7 @@ def run_test(test_func, test_args):
         print(f"ERROR: {e}")
         return False
     return True
+
 
 if __name__ == "__main__":
     args = parse_args()
