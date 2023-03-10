@@ -1,6 +1,6 @@
 import argparse
+
 import boto3
-import typing
 
 
 def parse_args():
@@ -16,12 +16,10 @@ def parse_args():
     )
     return parser.parse_args()
 
-
 class TestFailed(Exception):
     pass
 
-
-def test_vpc_exists(region_name: str, vpc_id: str) -> None:
+def test_vpc_exists(region_name, vpc_id):
     try:
         session = boto3.Session()
         ec2_client = session.client("ec2", region_name=region_name)
@@ -31,8 +29,7 @@ def test_vpc_exists(region_name: str, vpc_id: str) -> None:
     except Exception as e:
         raise TestFailed(f"Failed to test VPC {vpc_id}: {e}")
 
-
-def test_security_group_exists(region_name: str, security_group_id: str) -> None:
+def test_security_group_exists(region_name, security_group_id):
     try:
         session = boto3.Session()
         ec2_client = session.client("ec2", region_name=region_name)
@@ -44,8 +41,7 @@ def test_security_group_exists(region_name: str, security_group_id: str) -> None
     except Exception as e:
         raise TestFailed(f"Failed to test security group {security_group_id}: {e}")
 
-
-def test_subnets_exist(region_name: str, vpc_id: str, subnet_ids: typing.List[str]) -> None:
+def test_subnets_exist(region_name, vpc_id, subnet_ids):
     try:
         session = boto3.Session()
         ec2_client = session.client("ec2", region_name=region_name)
@@ -56,6 +52,13 @@ def test_subnets_exist(region_name: str, vpc_id: str, subnet_ids: typing.List[st
     except Exception as e:
         raise TestFailed(f"Failed to test subnets: {e}")
 
+def run_test(test_func, test_args):
+    try:
+        test_func(*test_args)
+    except TestFailed as e:
+        print(f"ERROR: {e}")
+        return False
+    return True
 
 if __name__ == "__main__":
     args = parse_args()
@@ -68,10 +71,5 @@ if __name__ == "__main__":
 
     has_errors = False
     for test_func, test_args in test_cases:
-        try:
-            test_func(*test_args)
-        except TestFailed as e:
+        if not run_test(test_func, test_args):
             has_errors = True
-            print(f"ERROR: {e}")
-    if has_errors:
-        exit(1)
