@@ -50,7 +50,7 @@ def test_security_group_exists(region_name, security_group_id):
     ec2_client = session.client("ec2", region_name=region_name)
 
     # Initiate the response variable
-    response = None
+    response = {}
 
     # Use the method describe_security_groups to get the security group information
     try:
@@ -80,7 +80,7 @@ def test_subnets_exist(region_name, vpc_id, subnet_ids):
 
     # Specify the AWS region you want to check
     ec2_client = session.client("ec2", region_name=region_name)
-    
+
     # Initiate the response variable
     response = {}
 
