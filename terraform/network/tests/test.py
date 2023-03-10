@@ -67,9 +67,9 @@ if __name__ == "__main__":
     ]
 
     has_errors = False
-    for test_func, args in test_cases:
+    for test_func, test_args in test_cases:
         try:
-            test_func(*args)
+            test_func(*test_args)
         except TestFailed as e:
             has_errors = True
             print(f"ERROR: {e}")
