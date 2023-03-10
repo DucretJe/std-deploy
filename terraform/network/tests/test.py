@@ -103,7 +103,7 @@ def test_subnets_exist(region_name, vpc_id, subnet_ids):
             assert False, f"Subnet with ID {subnet_id} does not exist"
 
     # If all subnet IDs are found, the test passes
-    print(f"All subnets exist")
+    print("All subnets exist")
     assert len(subnet_ids) == len(subnet_ids_in_aws), f"Not all subnets exist"
 
 
