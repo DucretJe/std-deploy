@@ -1,6 +1,6 @@
 import argparse
-
 import boto3
+import typing
 
 
 def parse_args():
@@ -21,7 +21,7 @@ class TestFailed(Exception):
     pass
 
 
-def test_vpc_exists(region_name, vpc_id):
+def test_vpc_exists(region_name: str, vpc_id: str) -> None:
     try:
         session = boto3.Session()
         ec2_client = session.client("ec2", region_name=region_name)
@@ -32,7 +32,7 @@ def test_vpc_exists(region_name, vpc_id):
         raise TestFailed(f"Failed to test VPC {vpc_id}: {e}")
 
 
-def test_security_group_exists(region_name, security_group_id):
+def test_security_group_exists(region_name: str, security_group_id: str) -> None:
     try:
         session = boto3.Session()
         ec2_client = session.client("ec2", region_name=region_name)
@@ -45,7 +45,7 @@ def test_security_group_exists(region_name, security_group_id):
         raise TestFailed(f"Failed to test security group {security_group_id}: {e}")
 
 
-def test_subnets_exist(region_name, vpc_id, subnet_ids):
+def test_subnets_exist(region_name: str, vpc_id: str, subnet_ids: typing.List[str]) -> None:
     try:
         session = boto3.Session()
         ec2_client = session.client("ec2", region_name=region_name)
