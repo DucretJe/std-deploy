@@ -3,6 +3,7 @@ import argparse
 import boto3
 
 
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--region", required=True, help="AWS region")
@@ -17,102 +18,59 @@ def parse_args():
     return parser.parse_args()
 
 
+class TestFailed(Exception):
+    pass
+
+
 def test_vpc_exists(region_name, vpc_id):
-    # Create a Boto3 session
-    session = boto3.Session()
-
-    # Specify the AWS region you want to check
-    ec2_client = session.client("ec2", region_name=region_name)
-
-    # Use the method describe_vpcs to get the VPC information
     try:
+        session = boto3.Session()
+        ec2_client = session.client("ec2", region_name=region_name)
         response = ec2_client.describe_vpcs(VpcIds=[vpc_id])
-    except ec2_client.exceptions.ClientError as e:
-        if e.response["Error"]["Code"] == "InvalidVpcID.NotFound":
-            # If the VPC does not exist, the test fails
-            print(f"VPC {vpc_id} does not exist")
-            assert False, f"VPC {vpc_id} does not exist"
-        else:
-            # If an error other than "VPC not found" occurs, the test fails
-            print(f"An error occurred: {e}")
-            assert False, f"An error occurred: {e}"
-
-    # If the response contains a VPC, the test passes
-    print(f"VPC {vpc_id} exists")
-    assert len(response["Vpcs"]) == 1, f"VPC {vpc_id} does not exist"
+        assert len(response["Vpcs"]) == 1, f"VPC {vpc_id} does not exist"
+        print(f"VPC {vpc_id} exists")
+    except Exception as e:
+        raise TestFailed(f"Failed to test VPC {vpc_id}: {e}")
 
 
 def test_security_group_exists(region_name, security_group_id):
-    # Create a Boto3 session
-    session = boto3.Session()
-
-    # Specify the AWS region you want to check
-    ec2_client = session.client("ec2", region_name=region_name)
-
-    # Initiate the response variable
-    response = {}
-
-    # Use the method describe_security_groups to get the security group information
     try:
+        session = boto3.Session()
+        ec2_client = session.client("ec2", region_name=region_name)
         response = ec2_client.describe_security_groups(GroupIds=[security_group_id])
-    except ec2_client.exceptions.ClientError as e:
-        if e.response["Error"]["Code"] == "InvalidGroupId.NotFound":
-            # If the security group does not exist, the test fails
-            print(f"Security group {security_group_id} does not exist")
-            assert (
-                len(response["SecurityGroups"]) == 1
-            ), f"Security group {security_group_id} does not exist"
-        else:
-            # If an error other than "Security group not found" occurs, the test fails
-            print(f"An error occurred: {e}")
-            assert False, f"An error occurred: {e}"
-
-    # If the response contains a security group, the test passes
-    print(f"Security group {security_group_id} exists")
-    assert (
-        len(response["SecurityGroups"]) == 1
-    ), f"Security group {security_group_id} does not exist"
+        assert len(response["SecurityGroups"]) == 1, f"Security group {security_group_id} does not exist"
+        print(f"Security group {security_group_id} exists")
+    except Exception as e:
+        raise TestFailed(f"Failed to test security group {security_group_id}: {e}")
 
 
 def test_subnets_exist(region_name, vpc_id, subnet_ids):
-    # Create a Boto3 session
-    session = boto3.Session()
-
-    # Specify the AWS region you want to check
-    ec2_client = session.client("ec2", region_name=region_name)
-
-    # Initiate the response variable
-    response = {}
-
-    # Use the method describe_subnets to get the subnet information
     try:
+        session = boto3.Session()
+        ec2_client = session.client("ec2", region_name=region_name)
         response = ec2_client.describe_subnets(SubnetIds=subnet_ids)
-    except ec2_client.exceptions.ClientError as e:
-        # If an error occurs, the test fails
-        print(f"An error occurred: {e}")
-        assert False, f"An error occurred: {e}"
-
-    # Get the IDs of the subnets
-    subnet_ids_in_aws = [subnet["SubnetId"] for subnet in response["Subnets"]]
-
-    # Check if each subnet ID is in the local list of subnet IDs
-    for subnet_id in subnet_ids:
-        if subnet_id not in subnet_ids_in_aws:
-            # If a subnet ID is not found, the test fails
-            print(f"Subnet with ID {subnet_id} does not exist")
-            assert False, f"Subnet with ID {subnet_id} does not exist"
-
-    # If all subnet IDs are found, the test passes
-    print("All subnets exist")
-    assert len(subnet_ids) == len(subnet_ids_in_aws), f"Not all subnets exist"
+        subnet_ids_in_aws = [subnet["SubnetId"] for subnet in response["Subnets"]]
+        assert len(subnet_ids) == len(subnet_ids_in_aws), "Not all subnets exist"
+        print("All subnets exist")
+    except Exception as e:
+        raise TestFailed(f"Failed to test subnets: {e}")
 
 
 if __name__ == "__main__":
     args = parse_args()
-    test_vpc_exists(region_name=args.region, vpc_id=args.vpc_id)
-    test_security_group_exists(
-        region_name=args.region, security_group_id=args.security_group_id
-    )
-    test_subnets_exist(
-        region_name=args.region, vpc_id=args.vpc_id, subnet_ids=args.subnet_ids
-    )
+
+    test_cases = [
+        (test_vpc_exists, [args.region, args.vpc_id]),
+        (test_security_group_exists, [args.region, args.security_group_id]),
+        (test_subnets_exist, [args.region, args.vpc_id, args.subnet_ids])
+    ]
+
+    has_errors = False
+    for test_func, args in test_cases:
+        try:
+            test_func(*args)
+        except TestFailed as e:
+            has_errors = True
+            print(f"ERROR: {e}")
+    if has_errors:
+        exit(1)
