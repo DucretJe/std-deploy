@@ -36,3 +36,7 @@ output "vpc_id" {
 output "sg_id" {
   value = module.network.sg_id
 }
+
+output "subnet_ids" {
+  value = module.network.subnet_ids
+}
