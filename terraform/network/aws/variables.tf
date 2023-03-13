@@ -1,3 +1,17 @@
+variable "internet_gateway" {
+  description = "Whether to create an Internet Gateway for the VPC"
+  type        = bool
+  default     = true
+}
+
+variable "internet_gateway_tags" {
+  description = "A mapping of tags to assign to the resource"
+  type        = map(string)
+  default = {
+    terraform = "true"
+  }
+}
+
 variable "sg_description" {
   description = "The description of the security group"
   type        = string
@@ -39,7 +53,7 @@ variable "vpc_cidr" {
 variable "vpc_tags" {
   description = "A mapping of tags to assign to the resource"
   type        = map(string)
-  default     = {
+  default = {
     terraform = "true"
   }
 }

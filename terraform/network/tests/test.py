@@ -57,6 +57,17 @@ def test_subnets_exist(region_name, vpc_id, subnet_ids):
         raise TestFailed(f"Failed to test subnets: {e}")
 
 
+def test_internet_gateway_exists(region_name, vpc_id):
+    try:
+        session = boto3.Session()
+        ec2_client = session.client("ec2", region_name=region_name)
+        response = ec2_client.describe_internet_gateways(Filters=[{"Name": "attachment.vpc-id", "Values": [vpc_id]}])
+        assert len(response["InternetGateways"]) == 1, f"Internet Gateway does not exist for VPC {vpc_id}"
+        print(f"Internet Gateway exists for VPC {vpc_id}")
+    except Exception as e:
+        raise TestFailed(f"Failed to test Internet Gateway: {e}")
+
+
 def run_test(test_func, test_args):
     try:
         test_func(*test_args)
@@ -73,6 +84,7 @@ if __name__ == "__main__":
         (test_vpc_exists, [args.region, args.vpc_id]),
         (test_security_group_exists, [args.region, args.security_group_id]),
         (test_subnets_exist, [args.region, args.vpc_id, args.subnet_ids]),
+        (test_internet_gateway_exists, [args.region, args.vpc_id]),
     ]
 
     has_errors = False

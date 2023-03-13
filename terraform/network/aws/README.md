@@ -1,6 +1,7 @@
 # AWS Network module
 
-This module is responsible of the network deployment in AWS
+This module is responsible of the network deployment in AWS.
+By default it creates an internet gateway and use it in the created VPC this can be disabled using the variable `internet_gateway = false`
 
 ## How to
 
