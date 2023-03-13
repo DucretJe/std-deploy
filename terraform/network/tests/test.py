@@ -49,12 +49,8 @@ def test_subnets_exist(region_name, vpc_id, subnet_ids):
     try:
         session = boto3.Session()
         ec2_client = session.client("ec2", region_name=region_name)
-        response = ec2_client.describe_internet_gateways(
-            Filters=[{"Name": "attachment.vpc-id", "Values": [vpc_id]}]
-        )
-        assert (
-            len(response["InternetGateways"]) == 1
-        ), f"Internet Gateway does not exist for VPC {vpc_id}"
+        response = ec2_client.describe_subnets(SubnetIds=subnet_ids)
+        subnet_ids_in_aws = [subnet["SubnetId"] for subnet in response["Subnets"]]
         assert len(subnet_ids) == len(subnet_ids_in_aws), "Not all subnets exist"
         print("All subnets exist")
     except Exception as e:
@@ -65,8 +61,12 @@ def test_internet_gateway_exists(region_name, vpc_id):
     try:
         session = boto3.Session()
         ec2_client = session.client("ec2", region_name=region_name)
-        response = ec2_client.describe_internet_gateways(Filters=[{"Name": "attachment.vpc-id", "Values": [vpc_id]}])
-        assert len(response["InternetGateways"]) == 1, f"Internet Gateway does not exist for VPC {vpc_id}"
+        response = ec2_client.describe_internet_gateways(
+            Filters=[{"Name": "attachment.vpc-id", "Values": [vpc_id]}]
+        )
+        assert (
+            len(response["InternetGateways"]) == 1
+        ), f"Internet Gateway does not exist for VPC {vpc_id}"
         print(f"Internet Gateway exists for VPC {vpc_id}")
     except Exception as e:
         raise TestFailed(f"Failed to test Internet Gateway: {e}")
