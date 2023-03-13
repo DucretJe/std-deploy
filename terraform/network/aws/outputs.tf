@@ -1,11 +1,11 @@
 output "vpc_id" {
   description = "ID of the VPC"
-  value = aws_vpc.this.id
+  value       = aws_vpc.this.id
 }
 
 output "sg_id" {
   description = "ID of the security group"
-  value = aws_security_group.this.id
+  value       = aws_security_group.this.id
 }
 
 output "subnet_ids" {
