@@ -2,6 +2,10 @@ variable "internet_gateway" {
   description = "Whether to create an Internet Gateway for the VPC"
   type        = bool
   default     = true
+  validation {
+    condition     = length(var.internet_gateway) <= 1
+    error_message = "The Internet Gateway can have a maximum of 1 character."
+  }
 }
 
 variable "internet_gateway_tags" {
