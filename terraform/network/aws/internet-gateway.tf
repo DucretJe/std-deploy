@@ -18,3 +18,9 @@ resource "aws_route_table" "my_rt" {
     Name = "MyRouteTable"
   }
 }
+
+resource "aws_route_table_association" "this" {
+  count          = length(aws_subnet.this)
+  subnet_id      = aws_subnet.this[count.index].id
+  route_table_id = aws_route_table.my_rt[0].id
+}
