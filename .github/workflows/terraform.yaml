@@ -1,5 +1,5 @@
 ---
-name: "🚀 Terraform"
+name: "🔬 Tests"
 
 on:
   pull_request:
@@ -10,16 +10,66 @@ on:
 
 concurrency: ci-${{ github.ref }}
 jobs:
-  terraform:
-    name: 🚀 Terraform
+  detect-change:
+    name: 🕵️ Change Detection
     runs-on: ubuntu-22.04
+    outputs:
+      all_changed_files: ${{ steps.changed_files.outputs.all_changed_files }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Make Plan
+      - name: Detect Changed Files
+        uses: tj-actions/changed-files@v35
+        id: changed_files
+
+  network:
+    name: 🕸️ Network
+    runs-on: ubuntu-22.04
+    needs: detect-change
+    if: ${{ contains(needs.detect-change.outputs.all_changed_files, 'terraform/network') }}
+    steps:
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v3
+
+      - name: 🚀 Make Plan
         run: make all
         working-directory: terraform/network/tests
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: eu-central-1
+
+      - name: 💥 Make Destroy
+        run: make destroy
+        if: always()
+        working-directory: terraform/network/tests
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: eu-central-1
+
+  compute-instances:
+    name: 🖥️ Compute Instances
+    runs-on: ubuntu-22.04
+    needs: detect-change
+    if: ${{ contains(needs.detect-change.outputs.all_changed_files, 'terraform/computing/instances') }}
+    steps:
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v3
+
+      - name: 🚀 Make Plan
+        run: make all
+        working-directory: terraform/computing/instances/tests
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: eu-central-1
+
+      - name: 💥 Make Destroy
+        run: make destroy
+        if: always()
+        working-directory: terraform/computing/instances/tests
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
