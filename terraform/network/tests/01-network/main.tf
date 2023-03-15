@@ -1,3 +1,7 @@
+resource "random_id" "id" {
+  byte_length = 8
+}
+
 module "network" {
   source = "../../aws/"
 
@@ -22,7 +26,8 @@ module "network" {
   ]
   sg_name = "sg"
 
-  vpc_cidr = "10.0.0.0/16"
+  vpc_cidr      = "10.0.0.0/16"
+  vpc_logs_name = "vpc-logs-${random_id.id.hex}"
   vpc_tags = {
     terraform   = "true"
     environment = "tests"
