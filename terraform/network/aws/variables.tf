@@ -74,6 +74,12 @@ variable "vpc_cidr" {
   }
 }
 
+variable "vpc_logs_name" {
+  description = "The name of the VPC logs"
+  type        = string
+  default     = "vpc-logs"
+}
+
 variable "vpc_tags" {
   description = "A mapping of tags to assign to the resource"
   type        = map(string)

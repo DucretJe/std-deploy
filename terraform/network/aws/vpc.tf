@@ -14,7 +14,7 @@ resource "aws_flow_log" "vpc_logs" {
 }
 
 resource "aws_cloudwatch_log_group" "vpc_logs" {
-  name              = "vpc-logs"
+  name              = var.vpc_logs_name
   retention_in_days = 30
 
   tags = var.vpc_tags
@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "assume_role" {
 }
 
 resource "aws_iam_role" "vpc_logs" {
-  name               = "vpc-logs"
+  name               = var.vpc_logs_name
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 
   tags = var.vpc_tags
@@ -57,7 +57,7 @@ data "aws_iam_policy_document" "vpc_logs" {
 }
 
 resource "aws_iam_role_policy" "vpc_logs" {
-  name   = "vpc-logs"
+  name   = var.vpc_logs_name
   role   = aws_iam_role.vpc_logs.id
   policy = data.aws_iam_policy_document.vpc_logs.json
 }
