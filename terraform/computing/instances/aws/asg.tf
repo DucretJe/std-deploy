@@ -1,7 +1,3 @@
-locals {
-  zones_count = length(var.subnets)
-}
-
 data "aws_ami" "this" {
   most_recent = true
 

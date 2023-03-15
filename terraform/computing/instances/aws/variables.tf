@@ -43,12 +43,6 @@ variable "asg_vpc_zone_identifier" {
   type        = list(string)
 }
 
-variable "instance_interruption_behavior" {
-  description = "The spot instance interruption behaviour to use for the launch template."
-  type        = string
-  default     = "terminate"
-}
-
 variable "launch_template_block_device_mappings_device_name" {
   description = "The device name to use for the launch template."
   type        = string
@@ -87,9 +81,10 @@ variable "launch_template_tags" {
   }
 }
 
-variable "launch_template_vpc_security_group_ids" {
-  description = "The security group ids to use for the launch template."
-  type        = list(string)
+variable "lb_internal" {
+  description = "Whether the load balancer is internal."
+  type        = bool
+  default     = false
 }
 
 variable "lb_name" {
@@ -98,42 +93,12 @@ variable "lb_name" {
   default     = "lb"
 }
 
-variable "lb_internal" {
-  description = "Whether the load balancer is internal."
-  type        = bool
-  default     = false
-}
-
-variable "lb_type" {
-  description = "The type to use for the load balancer."
-  type        = string
-  default     = "application"
-}
-
 variable "lb_tags" {
   description = "The tags to use for the load balancer."
   type        = map(string)
   default = {
     terraform = "true"
   }
-}
-
-variable "lb_tg_prefix_name" {
-  description = "The prefix name to use for the load balancer."
-  type        = string
-  default     = "lb"
-}
-
-variable "lb_tg_port" {
-  description = "The port to use for the load balancer."
-  type        = number
-  default     = 80
-}
-
-variable "lb_tg_protocol" {
-  description = "The protocol to use for the load balancer."
-  type        = string
-  default     = "HTTP"
 }
 
 variable "lb_tg_health_check_path" {
@@ -146,6 +111,30 @@ variable "lb_tg_health_check_protocol" {
   description = "The protocol to use for the load balancer health check."
   type        = string
   default     = "HTTP"
+}
+
+variable "lb_tg_port" {
+  description = "The port to use for the load balancer."
+  type        = number
+  default     = 80
+}
+
+variable "lb_tg_prefix_name" {
+  description = "The prefix name to use for the load balancer."
+  type        = string
+  default     = "lb"
+}
+
+variable "lb_tg_protocol" {
+  description = "The protocol to use for the load balancer."
+  type        = string
+  default     = "HTTP"
+}
+
+variable "lb_type" {
+  description = "The type to use for the load balancer."
+  type        = string
+  default     = "application"
 }
 
 variable "on_demand_allocation_strategy" {
@@ -184,28 +173,10 @@ variable "spot_instance_pools" {
   default     = 2
 }
 
-variable "spot_instance_type" {
-  description = "The spot instance type to use for the launch template."
-  type        = string
-  default     = "one-time"
-}
-
-variable "spot_block_duration_minutes" {
-  description = "The spot block duration in minutes to use for the launch template."
-  type        = number
-  default     = 0
-}
-
 variable "spot_max_price" {
   description = "The spot max price to use for the launch template."
   type        = string
   default     = "0.1"
-}
-
-variable "use_spot_instances" {
-  description = "Whether to use spot instances or not."
-  type        = bool
-  default     = false
 }
 
 variable "subnets" {
