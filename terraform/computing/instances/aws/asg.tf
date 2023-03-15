@@ -64,13 +64,15 @@ resource "aws_autoscaling_group" "this" {
 
   target_group_arns = [aws_lb_target_group.this.arn]
 
-  tags = [
-    for key, value in var.asg_tags :
-    {
-      key   = key
-      value = value
+  dynamic "tag" {
+    for_each = var.asg_tags
+    content {
+      key                 = tag.key
+      value               = tag.value
+      propagate_at_launch = true
     }
-  ]
+  }
+
 }
 
 data "template_file" "user_data" {
