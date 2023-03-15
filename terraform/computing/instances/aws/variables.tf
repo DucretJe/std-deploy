@@ -1,4 +1,68 @@
-# Les validations pour les variables "ami_filters", "asg_desired_capacity", "asg_min_size" et "asg_vpc_zone_identifier" ont déjà été ajoutées dans la réponse précédente.
+variable "ami_filters" {
+  description = "value of the filter to apply to the AMI search."
+  type        = map(list(string))
+  default = {
+    name = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+  validation {
+    condition     = length(var.ami_filters) > 0
+    error_message = "The ami_filters map must contain at least one filter."
+  }
+}
+
+variable "ami_owner" {
+  description = "The owner of the AMI to use. If not specified, the default is the owner alias amazon."
+  type        = string
+  default     = ""
+}
+
+variable "asg_desired_capacity" {
+  description = "The desired capacity of the autoscaling group."
+  type        = number
+  default     = 1
+  validation {
+    condition     = var.asg_desired_capacity >= 0
+    error_message = "The desired capacity must be greater than or equal to 0."
+  }
+}
+
+variable "asg_max_size" {
+  description = "The maximum size of the autoscaling group."
+  type        = number
+  default     = 1
+  validation {
+    condition     = var.asg_max_size >= 1
+    error_message = "The maximum size of the autoscaling group must be greater than or equal to 1."
+  }
+}
+
+variable "asg_min_size" {
+  description = "The minimum size of the autoscaling group."
+  type        = number
+  default     = 1
+  validation {
+    condition     = var.asg_min_size >= 0
+    error_message = "The minimum size must be greater than or equal to 0."
+  }
+}
+
+variable "asg_tags" {
+  description = "The tags to use for the ASG."
+  type        = map(string)
+  default = {
+    terraform = "true"
+  }
+}
+
+variable "asg_vpc_zone_identifier" {
+  description = "The vpc zone identifier to use for the autoscaling group."
+  type        = list(string)
+  validation {
+    condition     = length(var.asg_vpc_zone_identifier) > 0
+    error_message = "The vpc_zone_identifier list must contain at least one value."
+  }
+}
+
 
 variable "launch_template_block_device_mappings_device_name" {
   description = "The device name to use for the launch template."
