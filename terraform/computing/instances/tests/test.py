@@ -4,6 +4,7 @@ import time
 import boto3
 import requests
 
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--region", required=True, help="AWS region")
@@ -64,7 +65,7 @@ def test_url_status_code(url, retries=10, delay=5):
             response = requests.get(f"http://{url}:80")
             if response.status_code == 200:
                 break
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException:
             pass
 
         if attempt == retries - 1:
