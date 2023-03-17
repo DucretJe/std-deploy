@@ -63,6 +63,83 @@ variable "asg_vpc_zone_identifier" {
   }
 }
 
+variable "cloudwatch_scale_down_alarms" {
+  description = "The cloudwatch alarms to use for scaling down the autoscaling group."
+  type = map(object({
+    alarm_name          = string
+    comparison_operator = string
+    evaluation_periods  = string
+    metric_name         = string
+    namespace           = string
+    period              = string
+    statistic           = string
+    threshold           = string
+    alarm_description   = string
+  }))
+  default = {
+    cpu-utilization = {
+      alarm_name          = "cpu-utilization"
+      comparison_operator = "LessThanThreshold"
+      evaluation_periods  = 2
+      metric_name         = "CPUUtilization"
+      namespace           = "AWS/EC2"
+      period              = 60
+      statistic           = "Average"
+      threshold           = 20
+      alarm_description   = "Scale down if the average CPU utilization is less than 20% over 2 periods of 60 seconds."
+    },
+    memory-utilization = {
+      alarm_name          = "memory-utilization"
+      comparison_operator = "LessThanThreshold"
+      evaluation_periods  = 2
+      metric_name         = "MemoryUtilization"
+      namespace           = "System/Linux"
+      period              = 60
+      statistic           = "Average"
+      threshold           = 20
+      alarm_description   = "Scale down if the average Memory utilization is less than 20% over 2 periods of 60 seconds."
+    }
+  }
+}
+
+variable "cloudwatch_scale_up_alarms" {
+  description = "The cloudwatch alarms to use for scaling up the autoscaling group."
+  type = map(object({
+    alarm_name          = string
+    comparison_operator = string
+    evaluation_periods  = string
+    metric_name         = string
+    namespace           = string
+    period              = string
+    statistic           = string
+    threshold           = string
+    alarm_description   = string
+  }))
+  default = {
+    cpu-utilization = {
+      alarm_name          = "cpu-utilization"
+      comparison_operator = "GreaterThanThreshold"
+      evaluation_periods  = 2
+      metric_name         = "CPUUtilization"
+      namespace           = "AWS/EC2"
+      period              = 60
+      statistic           = "Average"
+      threshold           = 80
+      alarm_description   = "Scale up if CPU > 80% for 2 periods of 60 seconds."
+    },
+    memory-utilization = {
+      alarm_name          = "memory-utilization"
+      comparison_operator = "GreaterThanThreshold"
+      evaluation_periods  = 2
+      metric_name         = "MemoryUtilization"
+      namespace           = "System/Linux"
+      period              = 60
+      statistic           = "Average"
+      threshold           = 80
+      alarm_description   = "Scale up if Memory > 80% for 2 periods of 60 seconds."
+    }
+  }
+}
 
 variable "launch_template_block_device_mappings_device_name" {
   description = "The device name to use for the launch template."
