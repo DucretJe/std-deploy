@@ -14,9 +14,7 @@ resource "aws_route_table" "my_rt" {
     gateway_id = aws_internet_gateway.this[0].id
   }
 
-  tags = {
-    Name = "MyRouteTable"
-  }
+  tags = var.route_table_tags
 }
 
 resource "aws_route_table_association" "this" {
