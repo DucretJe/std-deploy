@@ -16,6 +16,18 @@ variable "internet_gateway_tags" {
   }
 }
 
+variable "route_table_tags" {
+  description = "A mapping of tags to assign to the resource"
+  type        = map(string)
+  default = {
+    terraform = "true"
+  }
+  validation {
+    condition     = length(keys(var.route_table_tags)) <= 10
+    error_message = "The maximum number of tags that can be applied to a resource is 10."
+  }
+}
+
 variable "sg_description" {
   description = "The description of the security group"
   type        = string
