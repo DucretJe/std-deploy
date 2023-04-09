@@ -1,8 +1,6 @@
 resource "aws_internet_gateway" "this" {
   count  = var.internet_gateway ? 1 : 0
   vpc_id = aws_vpc.this.id
-
-  tags = var.internet_gateway_tags
 }
 
 resource "aws_route_table" "my_rt" {
@@ -14,7 +12,6 @@ resource "aws_route_table" "my_rt" {
     gateway_id = aws_internet_gateway.this[0].id
   }
 
-  tags = var.route_table_tags
 }
 
 resource "aws_route_table_association" "this" {
