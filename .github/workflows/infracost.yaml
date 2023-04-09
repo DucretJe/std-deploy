@@ -21,11 +21,12 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+  strategy:
     matrix:
-      directory: [
-        'terraform/network/tests',
-        'terraform/computing/instances/tests'
-      ]
+      directory:
+        - 'terraform/network/tests'
+        - 'terraform/computing/instances/tests'
+
 
     steps:
       - name: Setup Infracost
