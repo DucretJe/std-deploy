@@ -1,14 +1,10 @@
 module "instances" {
   source = "../../aws/"
 
-  ami_owner            = ""
-  asg_desired_capacity = 1
-  asg_max_size         = 1
-  asg_min_size         = 1
-  asg_tags = {
-    terraform = "true"
-    test      = "true"
-  }
+  ami_owner                                                      = ""
+  asg_desired_capacity                                           = 1
+  asg_max_size                                                   = 1
+  asg_min_size                                                   = 1
   asg_vpc_zone_identifier                                        = data.terraform_remote_state.network.outputs.subnet_ids
   launch_template_block_device_mappings_device_name              = "/dev/xvda"
   launch_template_block_device_mappings_ebs_volume_size          = 10
@@ -18,11 +14,6 @@ module "instances" {
   security_groups = [
     data.terraform_remote_state.network.outputs.sg_id
   ]
-  launch_template_tags = {
-    terraform = "true"
-    test      = "true"
-    name      = "test"
-  }
   ami_filters = {
     name = ["bitnami-nginx-1.23.3-21-r20-linux-debian-11-x86_64-hvm-ebs-nami-*"]
   }

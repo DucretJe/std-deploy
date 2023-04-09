@@ -1,7 +1,5 @@
 resource "aws_vpc" "this" {
   cidr_block = var.vpc_cidr
-
-  tags = var.vpc_tags
 }
 
 resource "aws_flow_log" "vpc_logs" {
@@ -9,15 +7,11 @@ resource "aws_flow_log" "vpc_logs" {
   log_destination = aws_cloudwatch_log_group.vpc_logs.arn
   traffic_type    = "ALL"
   vpc_id          = aws_vpc.this.id
-
-  tags = var.vpc_tags
 }
 
 resource "aws_cloudwatch_log_group" "vpc_logs" {
   name              = var.vpc_logs_name
   retention_in_days = 30
-
-  tags = var.vpc_tags
 }
 
 data "aws_iam_policy_document" "assume_role" {
@@ -36,8 +30,6 @@ data "aws_iam_policy_document" "assume_role" {
 resource "aws_iam_role" "vpc_logs" {
   name               = var.vpc_logs_name
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
-
-  tags = var.vpc_tags
 }
 
 data "aws_iam_policy_document" "vpc_logs" {

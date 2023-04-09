@@ -4,8 +4,6 @@ resource "aws_lb" "this" {
   load_balancer_type = var.lb_type
   security_groups    = var.security_groups
   subnets            = var.subnets
-
-  tags = var.lb_tags
 }
 
 resource "aws_lb_listener" "example" {
