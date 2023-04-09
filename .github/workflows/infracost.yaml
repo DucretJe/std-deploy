@@ -62,7 +62,6 @@ jobs:
       - name: Post Infracost comment
         run: |
           infracost comment github \
-            --usage-file /tmp/infracost-usage.yml \
             --path=/tmp/infracost.json \
             --repo=$GITHUB_REPOSITORY \
             --github-token=${{github.token}} \
