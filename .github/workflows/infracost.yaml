@@ -40,6 +40,7 @@ jobs:
           infracost breakdown \
             --sync-usage-file \
             --usage-file /tmp/infracost-usage.yml \
+            --config-file=infracost.yaml \
             --path=${TF_ROOT} \
             --format=json \
             --out-file=/tmp/infracost-base.json
@@ -52,6 +53,7 @@ jobs:
           infracost diff \
             --path=${TF_ROOT} \
             --usage-file /tmp/infracost-usage.yml \
+            --config-file=infracost.yaml \
             --format=json \
             --compare-to=/tmp/infracost-base.json \
             --out-file=/tmp/infracost.json
