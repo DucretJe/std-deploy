@@ -1,3 +1,4 @@
+---
 name: "💸 Infracost"
 
 on:
@@ -39,9 +40,12 @@ jobs:
 
       - name: Generate Infracost cost estimate baseline
         run: |
-          infracost breakdown --path=${{ matrix.directory }} \
-                              --format=json \
-                              --out-file=/tmp/infracost-base.json
+          infracost breakdown \
+            --sync-usage-file \
+            --usage-file /tmp/infracost-usage.yml \
+            --path=${{ matrix.directory }} \
+            --format=json \
+            --out-file=/tmp/infracost-base.json
 
       - name: Checkout PR branch
         uses: actions/checkout@v3
@@ -50,6 +54,7 @@ jobs:
         run: |
           infracost diff \
             --path=${{ matrix.directory }} \
+            --usage-file /tmp/infracost-usage.yml \
             --format=json \
             --compare-to=/tmp/infracost-base.json \
             --out-file=/tmp/infracost.json
@@ -57,6 +62,7 @@ jobs:
       - name: Post Infracost comment
         run: |
           infracost comment github \
+            --usage-file /tmp/infracost-usage.yml \
             --path=/tmp/infracost.json \
             --repo=$GITHUB_REPOSITORY \
             --github-token=${{github.token}} \
