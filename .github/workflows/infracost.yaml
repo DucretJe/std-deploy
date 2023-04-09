@@ -21,10 +21,8 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    strategy:
-      matrix:
-        directory:
-          - 'terraform/'
+    env:
+      TF_ROOT: terraform/
 
     steps:
       - name: Setup Infracost
@@ -42,7 +40,7 @@ jobs:
           infracost breakdown \
             --sync-usage-file \
             --usage-file /tmp/infracost-usage.yml \
-            --path=${{ matrix.directory }} \
+            --path=${TF_ROOT} \
             --format=json \
             --out-file=/tmp/infracost-base.json
 
@@ -52,7 +50,7 @@ jobs:
       - name: Generate Infracost diff
         run: |
           infracost diff \
-            --path=${{ matrix.directory }} \
+            --path=${TF_ROOT} \
             --usage-file /tmp/infracost-usage.yml \
             --format=json \
             --compare-to=/tmp/infracost-base.json \
