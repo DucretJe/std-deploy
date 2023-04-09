@@ -22,7 +22,10 @@ jobs:
       contents: read
       pull-requests: write
     matrix:
-      directory: [ 'terraform/network/tests', 'terraform/computing/instances/tests' ]
+      directory: [
+        'terraform/network/tests',
+        'terraform/computing/instances/tests'
+      ]
 
     steps:
       - name: Setup Infracost
@@ -46,15 +49,17 @@ jobs:
 
       - name: Generate Infracost diff
         run: |
-          infracost diff --path=${{ matrix.directory }} \
-                          --format=json \
-                          --compare-to=/tmp/infracost-base.json \
-                          --out-file=/tmp/infracost.json
+          infracost diff \
+            --path=${{ matrix.directory }} \
+            --format=json \
+            --compare-to=/tmp/infracost-base.json \
+            --out-file=/tmp/infracost.json
 
       - name: Post Infracost comment
         run: |
-            infracost comment github --path=/tmp/infracost.json \
-                                     --repo=$GITHUB_REPOSITORY \
-                                     --github-token=${{github.token}} \
-                                     --pull-request=${{github.event.pull_request.number}} \
-                                     --behavior=update
+          infracost comment github \
+            --path=/tmp/infracost.json \
+            --repo=$GITHUB_REPOSITORY \
+            --github-token=${{github.token}} \
+            --pull-request=${{github.event.pull_request.number}} \
+            --behavior=update
