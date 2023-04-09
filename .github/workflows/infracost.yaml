@@ -27,7 +27,6 @@ jobs:
         - 'terraform/network/tests'
         - 'terraform/computing/instances/tests'
 
-
     steps:
       - name: Setup Infracost
         uses: infracost/actions/setup@v2
