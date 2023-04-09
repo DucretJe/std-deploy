@@ -46,14 +46,6 @@ variable "asg_min_size" {
   }
 }
 
-variable "asg_tags" {
-  description = "The tags to use for the ASG."
-  type        = map(string)
-  default = {
-    terraform = "true"
-  }
-}
-
 variable "asg_vpc_zone_identifier" {
   description = "The vpc zone identifier to use for the autoscaling group."
   type        = list(string)
@@ -187,14 +179,6 @@ variable "launch_template_network_interfaces_associate_public_ip_address" {
   default     = false
 }
 
-variable "launch_template_tags" {
-  description = "The tags to use for the launch template."
-  type        = map(string)
-  default = {
-    terraform = "true"
-  }
-}
-
 variable "lb_internal" {
   description = "Whether the load balancer is internal."
   type        = bool
@@ -208,14 +192,6 @@ variable "lb_name" {
   validation {
     condition     = length(var.lb_name) > 0
     error_message = "The load balancer name must not be empty."
-  }
-}
-
-variable "lb_tags" {
-  description = "The tags to use for the load balancer."
-  type        = map(string)
-  default = {
-    terraform = "true"
   }
 }
 

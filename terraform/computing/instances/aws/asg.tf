@@ -32,13 +32,10 @@ resource "aws_launch_template" "this" {
   instance_type = var.launch_template_instance_type
 
   user_data = base64encode(data.template_file.user_data.rendered)
-
-  tag_specifications {
-    resource_type = "instance"
-
-    tags = var.launch_template_tags
-  }
 }
+
+data "aws_default_tags" "this" {}
+
 
 resource "aws_autoscaling_group" "this" {
   desired_capacity    = var.asg_desired_capacity
@@ -65,7 +62,7 @@ resource "aws_autoscaling_group" "this" {
   target_group_arns = [aws_lb_target_group.this.arn]
 
   dynamic "tag" {
-    for_each = var.asg_tags
+    for_each = data.aws_default_tags.this.tags
     content {
       key                 = tag.key
       value               = tag.value
