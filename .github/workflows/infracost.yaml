@@ -46,8 +46,7 @@ jobs:
           terraform plan \
             -out=/tmp/plan \
             -input=false \
-            -no-color \
-            ${{ matrix.directory }}
+            -no-color
 
       - name: Generate Infracost cost estimate baseline
         run: |
