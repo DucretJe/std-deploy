@@ -27,10 +27,19 @@ jobs:
     name: 🕸️ Network
     runs-on: ubuntu-22.04
     needs: detect-change
-    if: ${{ contains(needs.detect-change.outputs.all_changed_files, 'terraform/network') }}
+    if: ${{ contains(
+          needs.detect-change.outputs.all_changed_files,
+          'terraform/network'
+            )
+        }}
     steps:
       - name: 🛎️ Checkout
         uses: actions/checkout@v3
+
+      - name: ⚙️ Setup Infracost
+        uses: infracost/actions/setup@v2
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
 
       - name: 🚀 Make Plan
         run: make all
@@ -48,15 +57,48 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: eu-central-1
+
+      - name: 🤖 Generate Infracost cost estimate baseline
+        working-directory: terraform/network/tests
+        run: |
+          infracost breakdown \
+            --path plan.json \
+            --format=json \
+            --out-file=/tmp/infracost.json
+
+      - name: 🧮 Generate Infracost diff
+        working-directory: terraform/network/tests
+        run: |
+          infracost diff \
+            --path plan.json \
+            --format=json \
+            --out-file=/tmp/infracost.json
+
+      - name: 💵 Post Infracost comment
+        run: |
+          infracost comment github \
+            --path=/tmp/infracost.json \
+            --repo="$GITHUB_REPOSITORY" \
+            --github-token="${{github.token}}" \
+            --pull-request="${{github.event.pull_request.number}}" \
+            --behavior=new
 
   compute-instances:
     name: 🖥️ Compute Instances
     runs-on: ubuntu-22.04
     needs: detect-change
-    if: ${{ contains(needs.detect-change.outputs.all_changed_files, 'terraform/computing/instances') }}
+    if: ${{ contains(
+          needs.detect-change.outputs.all_changed_files, 
+          'terraform/computing/instances') 
+        }}
     steps:
       - name: 🛎️ Checkout
         uses: actions/checkout@v3
+
+      - name: ⚙️ Setup Infracost
+        uses: infracost/actions/setup@v2
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
 
       - name: 🚀 Make Plan
         run: make all
@@ -74,3 +116,28 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: eu-central-1
+
+      - name: 🤖 Generate Infracost cost estimate baseline
+        working-directory: terraform/computing/instances/tests
+        run: |
+          infracost breakdown \
+            --path plan.json \
+            --format=json \
+            --out-file=/tmp/infracost.json
+
+      - name: 🧮 Generate Infracost diff
+        working-directory: terraform/computing/instances/tests
+        run: |
+          infracost diff \
+            --path plan.json \
+            --format=json \
+            --out-file=/tmp/infracost.json
+
+      - name: 💵 Post Infracost comment
+        run: |
+          infracost comment github \
+            --path=/tmp/infracost.json \
+            --repo="$GITHUB_REPOSITORY" \
+            --github-token="${{github.token}}" \
+            --pull-request="${{github.event.pull_request.number}}" \
+            --behavior=new
