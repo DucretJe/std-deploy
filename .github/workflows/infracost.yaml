@@ -36,12 +36,12 @@ jobs:
           ref: '${{ github.event.pull_request.base.ref }}'
 
       - name: DEBUG
-        run: pwd && ls -lah
+        run: cd .github/ && pwd && ls -lah
 
       - name: Generate Infracost cost estimate baseline
         run: |
           infracost breakdown \
-            --config-file=.github/infracost.yaml \
+            --config-file=./.github/infracost.yaml \
 
       - name: Checkout PR branch
         uses: actions/checkout@v3
