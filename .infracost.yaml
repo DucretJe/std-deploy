@@ -1,7 +1,0 @@
-version: 0.1
-projects:
-  - path: terraform/network/tests
-    name: Network Tests
-
-  - path: terraform/computing/instances/tests
-    name: Computing Instances Tests

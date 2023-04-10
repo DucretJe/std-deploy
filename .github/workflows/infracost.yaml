@@ -21,8 +21,11 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    env:
-      TF_ROOT: terraform/
+    strategy:
+      matrix:
+        directory:
+          - 'terraform/network/tests'
+          - 'terraform/computing/instances/tests'
 
     steps:
       - name: Setup Infracost
@@ -35,13 +38,20 @@ jobs:
         with:
           ref: '${{ github.event.pull_request.base.ref }}'
 
-      - name: DEBUG
-        run: pwd && ls -lah
+      - name: Generate Terraform plan
+        run: |
+          terraform init ${{ matrix.directory }}
+          terraform plan \
+            -out=/tmp/plan \
+            -input=false \
+            -no-color \
+            -var-file=terraform.tfvars \
+            ${{ matrix.directory }}
 
       - name: Generate Infracost cost estimate baseline
         run: |
           infracost breakdown \
-            --config-file=.infracost.yaml \
+            --path plan.json
 
       - name: Checkout PR branch
         uses: actions/checkout@v3
@@ -49,12 +59,7 @@ jobs:
       - name: Generate Infracost diff
         run: |
           infracost diff \
-            --path=${TF_ROOT} \
-            --usage-file /tmp/infracost-usage.yml \
-            --config-file=infracost.yaml \
-            --format=json \
-            --compare-to=/tmp/infracost-base.json \
-            --out-file=/tmp/infracost.json
+            --path /tmp/plan
 
       - name: Post Infracost comment
         run: |
