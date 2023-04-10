@@ -46,7 +46,8 @@ jobs:
           terraform plan \
             -out=/tmp/plan \
             -input=false \
-            -no-color
+            -no-color && \
+          terraform show -json /tmp/plan > /tmp/plan.json
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -55,7 +56,8 @@ jobs:
       - name: Generate Infracost cost estimate baseline
         run: |
           infracost breakdown \
-            --path plan.json
+            --path /tmp/plan.json
+            --out-file=/tmp/infracost.json
 
       - name: Checkout PR branch
         uses: actions/checkout@v3
@@ -63,7 +65,8 @@ jobs:
       - name: Generate Infracost diff
         run: |
           infracost diff \
-            --path /tmp/plan
+            --path /tmp/plan.json
+            --out-file=/tmp/infracost.json
 
       - name: Post Infracost comment
         run: |
