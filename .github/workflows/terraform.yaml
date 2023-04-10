@@ -58,7 +58,7 @@ jobs:
         working-directory: terraform/network/tests
         run: |
           infracost breakdown \
-            --path plan.json
+            --path plan.json \
             --out-file=/tmp/infracost.json
 
       - name: 🧮 Generate Infracost diff
@@ -113,7 +113,7 @@ jobs:
         working-directory: terraform/computing/instances/tests
         run: |
           infracost breakdown \
-            --path plan.json
+            --path plan.json \
             --out-file=/tmp/infracost.json
 
       - name: 🧮 Generate Infracost diff
