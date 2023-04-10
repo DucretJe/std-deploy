@@ -24,8 +24,9 @@ jobs:
     strategy:
       matrix:
         directory:
-          - 'terraform/network/tests'
-          - 'terraform/computing/instances/tests'
+          - 'terraform/network/tests/01-network'
+          - 'terraform/computing/instances/tests/01-network'
+          - 'terraform/computing/instances/tests/02-instances'
 
     steps:
       - name: Setup Infracost
