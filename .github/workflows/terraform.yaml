@@ -32,6 +32,11 @@ jobs:
       - name: 🛎️ Checkout
         uses: actions/checkout@v3
 
+      - name: ⚙️ Setup Infracost
+        uses: infracost/actions/setup@v2
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
+
       - name: 🚀 Make Plan
         run: make all
         working-directory: terraform/network/tests

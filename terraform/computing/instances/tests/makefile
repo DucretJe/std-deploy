@@ -19,9 +19,7 @@ plan: check_env
 	cd ../02-instances && \
 	terraform init && \
 	terraform validate && \
-	terraform plan -out=plan  && \
-	terraform show -json plan > plan.json && \
-	rm plan && \
+	terraform plan && \
 	cd ../01-network && \
 	terraform destroy --auto-approve && \
 	echo "02-instances: SHOULD BE OK"
@@ -34,6 +32,9 @@ test: check_env
 	cd ../02-instances && \
 	terraform init && \
 	terraform validate && \
+	terraform plan -out=plan  && \
+	terraform show -json plan > plan.json && \
+	rm plan && \
 	terraform apply --auto-approve && \
 	cd .. && \
 	python3 -m venv .venv && \
