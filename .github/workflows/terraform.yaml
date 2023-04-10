@@ -27,7 +27,11 @@ jobs:
     name: 🕸️ Network
     runs-on: ubuntu-22.04
     needs: detect-change
-    if: ${{ contains(needs.detect-change.outputs.all_changed_files, 'terraform/network') }}
+    if: ${{ contains(
+          needs.detect-change.outputs.all_changed_files,
+          'terraform/network'
+            )
+        }}
     steps:
       - name: 🛎️ Checkout
         uses: actions/checkout@v3
@@ -82,7 +86,10 @@ jobs:
     name: 🖥️ Compute Instances
     runs-on: ubuntu-22.04
     needs: detect-change
-    if: ${{ contains(needs.detect-change.outputs.all_changed_files, 'terraform/computing/instances') }}
+    if: ${{ contains(
+          needs.detect-change.outputs.all_changed_files, 
+          'terraform/computing/instances') 
+        }}
     steps:
       - name: 🛎️ Checkout
         uses: actions/checkout@v3
