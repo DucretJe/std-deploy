@@ -63,6 +63,7 @@ jobs:
         run: |
           infracost breakdown \
             --path plan.json \
+            --format=json \
             --out-file=/tmp/infracost.json
 
       - name: 🧮 Generate Infracost diff
@@ -70,6 +71,7 @@ jobs:
         run: |
           infracost diff \
             --path plan.json \
+            --format=json \
             --out-file=/tmp/infracost.json
 
       - name: 💵 Post Infracost comment
