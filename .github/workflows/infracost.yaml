@@ -40,12 +40,12 @@ jobs:
 
       - name: Generate Terraform plan
         run: |
-          terraform init ${{ matrix.directory }}
+          cd ${{ matrix.directory }}
+          terraform init && \
           terraform plan \
             -out=/tmp/plan \
             -input=false \
             -no-color \
-            -var-file=terraform.tfvars \
             ${{ matrix.directory }}
 
       - name: Generate Infracost cost estimate baseline
