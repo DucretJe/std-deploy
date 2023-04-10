@@ -15,7 +15,9 @@ plan: check_env
 	@cd 01-network && \
 	terraform init && \
 	terraform validate && \
-	terraform plan  && \
+	terraform plan -out=plan  && \
+	terraform show -json plan > plan.json && \
+	rm plan && \
 	echo "01-network: SHOULD BE OK"
 
 test: check_env
