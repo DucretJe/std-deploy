@@ -23,7 +23,7 @@ test: check_env
 	terraform init && \
 	terraform validate && \
 	terraform plan -out=plan  && \
-	terraform show -json plan > plan.json && \
+	terraform show -json plan > ../plan.json && \
 	rm plan && \
 	terraform apply --auto-approve && \
 	cd .. && \
