@@ -26,8 +26,12 @@ The `make all` test is used by the CI and should success for a PR to be consider
 ### Deploy
 
 ```terraform
+resource "random_id" "id" {
+  byte_length = 8
+}
+
 module "network" {
-  source = "github.com/github.com/DucretJe/std-deploy//terraform/network/aws"
+  source = "../../aws/"
 
   sg_description = "Security group for the VPC"
   sg_egress_rules = [
@@ -50,10 +54,7 @@ module "network" {
   ]
   sg_name = "sg"
 
-  vpc_cidr = "10.0.0.0/16"
-  vpc_tags = {
-    terraform = "true"
-    environment = "tests"
-  }
+  vpc_cidr      = "10.0.0.0/16"
+  vpc_logs_name = "vpc-logs-${random_id.id.hex}"
 }
 ```
