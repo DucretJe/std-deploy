@@ -1,6 +1,5 @@
 # Deployments toolbox
 
-[![🔬 Tests](https://github.com/DucretJe/std-deploy/actions/workflows/terraform.yaml/badge.svg?branch=main)](https://github.com/DucretJe/std-deploy/actions/workflows/terraform.yaml)
 [![✨ Super-Linter](https://github.com/DucretJe/std-deploy/actions/workflows/linter.yaml/badge.svg?branch=main)](https://github.com/DucretJe/std-deploy/actions/workflows/linter.yaml)
 [![💫 Checkov - Terraform](https://github.com/DucretJe/std-deploy/actions/workflows/checkov.yaml/badge.svg?branch=main)](https://github.com/DucretJe/std-deploy/actions/workflows/checkov.yaml)
 
