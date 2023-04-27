@@ -1,7 +1,13 @@
-variable "internet_gateway" {
-  description = "Whether to create an Internet Gateway for the VPC"
+variable "create_public_subnet" {
+  description = "Whether to create Public Subnets"
   type        = bool
   default     = true
+}
+
+variable "create_private_subnet" {
+  description = "Whether to create Private Subnets"
+  type        = bool
+  default     = false
 }
 
 variable "sg_description" {
@@ -52,6 +58,18 @@ variable "sg_name" {
   }
 }
 
+variable "subnet_map_public_ip_on_launch" {
+  description = "A boolean flag to enable/disable public IP on launch for the subnets"
+  type        = bool
+  default     = false
+}
+
+variable "subnet_tags" {
+  description = "A map of tags to assign to the subnets"
+  type        = map(string)
+  default     = {}
+}
+
 variable "vpc_cidr" {
   description = "The IPv4 CIDR block for the VPC"
   type        = string
@@ -60,6 +78,18 @@ variable "vpc_cidr" {
     condition     = length(var.vpc_cidr) <= 32
     error_message = "The CIDR block can have a maximum of 32 characters."
   }
+}
+
+variable "vpc_dns_hostnames" {
+  description = "A boolean flag to enable/disable DNS hostnames in the VPC"
+  type        = bool
+  default     = false
+}
+
+variable "vpc_dns_support" {
+  description = "A boolean flag to enable/disable DNS support in the VPC"
+  type        = bool
+  default     = true
 }
 
 variable "vpc_logs_name" {

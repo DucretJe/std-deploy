@@ -32,7 +32,7 @@ test: check_env
 	pip install -r requirements.txt && \
 	python3 test.py --region ${AWS_REGION} --vpc-id $$(cd 01-network && terraform output vpc_id | sed 's/"//g') \
 	--security-group-id $$(cd 01-network && terraform output sg_id | sed 's/"//g') \
-	--subnet-ids $$(cd 01-network && terraform output subnet_ids | sed 's/\[//g; s/\]//g; s/\"//g; s/,//g') && \
+	--subnet-ids $$(cd 01-network && terraform output public_subnet_ids | sed 's/\[//g; s/\]//g; s/\"//g; s/,//g') && \
 	cd 01-network && \
 	terraform destroy --auto-approve && \
 	echo "01-network: OK"

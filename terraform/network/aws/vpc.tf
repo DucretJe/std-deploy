@@ -1,5 +1,7 @@
 resource "aws_vpc" "this" {
-  cidr_block = var.vpc_cidr
+  cidr_block           = var.vpc_cidr
+  enable_dns_support   = var.vpc_dns_support
+  enable_dns_hostnames = var.vpc_dns_hostnames
 }
 
 resource "aws_flow_log" "vpc_logs" {

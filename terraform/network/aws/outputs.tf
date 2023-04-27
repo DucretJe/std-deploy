@@ -8,7 +8,12 @@ output "sg_id" {
   value       = aws_security_group.this.id
 }
 
-output "subnet_ids" {
+output "private_subnet_ids" {
   description = "List of IDs of the subnets"
-  value       = aws_subnet.this[*].id
+  value       = aws_subnet.private[*].id
+}
+
+output "public_subnet_ids" {
+  description = "List of IDs of the subnets"
+  value       = aws_subnet.public[*].id
 }
