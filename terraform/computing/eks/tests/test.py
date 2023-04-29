@@ -65,12 +65,16 @@ def test_test_service_response(test_service_url, max_retries=6, retry_delay=10):
             assert (
                 response.status_code == 200
             ), f"Test service returned a {response.status_code} status code"
-            assert "It works!" in response.text, f"Test service returned: {response.text}"
+            assert (
+                "It works!" in response.text
+            ), f"Test service returned: {response.text}"
             print("Test service returned a 200 status code and 'It works!'")
             break
         except Exception as e:
             if attempt == max_retries:
-                raise TestFailed(f"Failed to test test service after {max_retries} attempts: {e}")
+                raise TestFailed(
+                    f"Failed to test test service after {max_retries} attempts: {e}"
+                )
             else:
                 print(f"Attempt {attempt} failed. Retrying in {retry_delay} seconds...")
                 time.sleep(retry_delay)
