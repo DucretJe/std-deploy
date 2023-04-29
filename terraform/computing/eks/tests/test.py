@@ -1,8 +1,8 @@
 import argparse
+import time
 
 import boto3
 import requests
-import time
 from botocore.exceptions import ClientError
 
 
