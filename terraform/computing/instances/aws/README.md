@@ -47,7 +47,7 @@ module "instances" {
     terraform = "true"
     test      = "true"
   }
-  asg_vpc_zone_identifier                                        = data.terraform_remote_state.network.outputs.subnet_ids
+  asg_vpc_zone_identifier                                        = data.terraform_remote_state.network.outputs.public_subnet_ids
   launch_template_block_device_mappings_device_name              = "/dev/xvda"
   launch_template_block_device_mappings_ebs_volume_size          = 10
   launch_template_instance_type                                  = "t2.micro"
@@ -66,7 +66,7 @@ module "instances" {
   }
   spot_max_price = "0.004"
   ssh_keys       = [data.http.ssh_keys.body]
-  subnets        = data.terraform_remote_state.network.outputs.subnet_ids
+  subnets        = data.terraform_remote_state.network.outputs.public_subnet_ids
   vpc_id         = data.terraform_remote_state.network.outputs.vpc_id
 }
 ```

@@ -27,3 +27,4 @@
 * [Network](./terraform/network/aws/README.md)
 * Computing
   * [Instances](./terraform/computing/instances/aws/README.md)
+  * [EKS](./terraform/computing/eks/aws/README.MD)
