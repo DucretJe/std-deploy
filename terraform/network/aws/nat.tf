@@ -1,7 +1,7 @@
 resource "aws_nat_gateway" "this" {
   count         = var.create_private_subnet ? 1 : 0
   allocation_id = aws_eip.this.id
-  subnet_id     = aws_subnet.private[0].id
+  subnet_id     = aws_subnet.public[0].id
 }
 
 resource "aws_route_table" "private_route_table" {
