@@ -4,8 +4,13 @@ variable "eks_cluster_name" {
   default     = "eks-cluster"
 }
 
-variable "eks_cluster_subnets_ids" {
-  description = "The IDs of the subnets to use for the EKS cluster"
+variable "eks_cluster_public_subnets_ids" {
+  description = "The IDs of the public subnets to use for the EKS cluster"
+  type        = list(string)
+}
+
+variable "eks_cluster_private_subnets_ids" {
+  description = "The IDs of the private subnets to use for the EKS cluster"
   type        = list(string)
 }
 
@@ -13,6 +18,18 @@ variable "eks_group_nodes_tags" {
   description = "A map of tags to assign to the EKS workers"
   type        = map(string)
   default     = {}
+}
+
+variable "eks_private_access" {
+  description = "Indicates whether or not the EKS cluster has private access"
+  type        = bool
+  default     = false
+}
+
+variable "eks_public_access" {
+  description = "Indicates whether or not the EKS cluster has public access"
+  type        = bool
+  default     = true
 }
 
 variable "eks_worker_capacity_type" {

@@ -8,7 +8,7 @@ resource "aws_eks_node_group" "this" {
   node_role_arn   = aws_iam_role.eks_workers.arn
   version         = aws_eks_cluster.this.version
   release_version = nonsensitive(data.aws_ssm_parameter.eks_ami_release_version.value)
-  subnet_ids      = var.eks_cluster_subnets_ids
+  subnet_ids      = local.subnet_ids
   capacity_type   = var.eks_worker_capacity_type
 
   scaling_config {
