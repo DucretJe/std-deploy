@@ -3,7 +3,13 @@
 This module is responsible of EKS cluster & worker nodes deployment in AWS.
 It will deploy it in a public subnet.
 
-TODO: Add choice to deploy in private subnets.
+By default the module will spawn an EKS with public & private endpoint.
+This can be changed with the following variables (bools):
+
+* `eks_private_access`
+* `eks_public_access`
+
+> ⚠️ A private EKS endpoint will prevent Terraform from deploy directly in the cluster since the API will be in a private zone therefor not reachable from internet.
 
 ## How to
 
@@ -33,14 +39,18 @@ Then you can call this module
 module "cluster" {
   source = "../../aws/"
 
-  eks_cluster_name        = data.terraform_remote_state.network.outputs.eks_cluster_name
-  eks_cluster_subnets_ids = data.terraform_remote_state.network.outputs.public_subnet_ids
+  eks_cluster_name                = data.terraform_remote_state.network.outputs.eks_cluster_name
+  eks_cluster_public_subnets_ids  = data.terraform_remote_state.network.outputs.public_subnet_ids
+  eks_cluster_private_subnets_ids = data.terraform_remote_state.network.outputs.private_subnet_ids
 
   eks_group_nodes_tags = {
     "kubernetes.io/cluster/${data.terraform_remote_state.network.outputs.eks_cluster_name}"     = "owned"
     "k8s.io/cluster-autoscaler/${data.terraform_remote_state.network.outputs.eks_cluster_name}" = "owned"
     "k8s.io/cluster-autoscaler/enabled"                                                         = "true"
   }
+
+  eks_private_access = true
+  eks_public_access  = true
 
   vpc_id = data.terraform_remote_state.network.outputs.vpc_id
 }
