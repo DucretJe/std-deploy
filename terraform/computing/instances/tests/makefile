@@ -13,11 +13,11 @@ check_env:
 
 plan: check_env
 	@cd 01-network && \
-	terraform init && \
+	terraform init -upgrade && \
 	terraform validate && \
 	terraform apply --auto-approve && \
 	cd ../02-instances && \
-	terraform init && \
+	terraform init -upgrade && \
 	terraform validate && \
 	terraform plan && \
 	cd ../01-network && \
@@ -26,11 +26,11 @@ plan: check_env
 
 test: check_env
 	@cd 01-network && \
-	terraform init && \
+	terraform init -upgrade && \
 	terraform validate && \
 	terraform apply --auto-approve && \
 	cd ../02-instances && \
-	terraform init && \
+	terraform init -upgrade && \
 	terraform validate && \
 	terraform plan -out=plan  && \
 	terraform show -json plan > ../plan.json && \
@@ -51,8 +51,8 @@ test: check_env
 
 destroy:
 	@cd 02-instances && \
-	terraform init && \
+	terraform init -upgrade && \
 	terraform destroy --auto-approve && \
 	cd ../01-network && \
-	terraform init && \
+	terraform init -upgrade && \
 	terraform destroy --auto-approve
