@@ -1,3 +1,19 @@
+variable "cloudflare_api_token" {
+  description = "The Cloudflare API token."
+  type        = string
+  sensitive   = true
+}
+
+variable "cloudflare_account_id" {
+  description = "The Cloudflare account ID."
+  type        = string
+}
+
+variable "cloudflare_zone" {
+  description = "The Cloudflare zone."
+  type        = string
+}
+
 variable "cluster_endpoint" {
   description = "The endpoint of the EKS cluster."
   type        = string

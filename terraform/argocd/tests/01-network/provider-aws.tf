@@ -4,7 +4,7 @@ provider "aws" {
   default_tags {
     tags = {
       Environment = "Test"
-      Service     = "Computing - EKS"
+      Service     = "ArgoCD"
       Application = "CI - Validation"
       Terraform   = "true"
     }
