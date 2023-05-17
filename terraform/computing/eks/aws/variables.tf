@@ -90,6 +90,11 @@ variable "eks_workers_min_capacity" {
   default     = 1
 }
 
+variable "externaldns_provider_settings" {
+  description = "The external DNS providers parameters"
+  type        = map(string)
+}
+
 variable "vpc_id" {
   description = "The ID of the VPC"
   type        = string

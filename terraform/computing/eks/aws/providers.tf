@@ -3,6 +3,15 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(aws_eks_cluster.this.certificate_authority[0].data)
   token                  = data.aws_eks_cluster_auth.this.token
 }
+provider "helm" {
+  repository_config_path = "${path.module}/.helm/repositories.yaml"
+  repository_cache       = "${path.module}/.helm"
+  kubernetes {
+    host                   = aws_eks_cluster.this.endpoint
+    cluster_ca_certificate = base64decode(aws_eks_cluster.this.certificate_authority[0].data)
+    token                  = data.aws_eks_cluster_auth.this.token
+  }
+}
 
 terraform {
   required_providers {
@@ -13,6 +22,10 @@ terraform {
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = "2.20.0"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "2.9.0"
     }
   }
 }

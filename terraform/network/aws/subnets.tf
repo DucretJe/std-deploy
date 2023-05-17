@@ -17,7 +17,7 @@ resource "aws_subnet" "private" {
   availability_zone = data.aws_availability_zones.all.names[count.index]
 
   tags = {
-    for key, value in var.subnet_tags : key => value
+    for key, value in var.private_subnet_tags : key => value
   }
 }
 
@@ -30,6 +30,6 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = var.subnet_map_public_ip_on_launch
 
   tags = {
-    for key, value in var.subnet_tags : key => value
+    for key, value in var.public_subnet_tags : key => value
   }
 }

@@ -1,3 +1,13 @@
+locals {
+  externaldns_provider = {
+    name = "cloudflare"
+    config = {
+      "cloudflare.apiToken" = var.cloudflare_apitoken
+      "cloudflare.zone"     = "familleducret.net"
+    }
+  }
+}
+
 module "cluster" {
   source = "../../aws/"
 
@@ -13,6 +23,12 @@ module "cluster" {
 
   eks_private_access = true
   eks_public_access  = true
+
+  externaldns_provider_settings = {
+    provider              = "cloudflare"
+    "cloudflare.apiToken" = var.cloudflare_apitoken
+    "cloudflare.zone"     = "familleducret.net"
+  }
 
   vpc_id = data.terraform_remote_state.network.outputs.vpc_id
 }
