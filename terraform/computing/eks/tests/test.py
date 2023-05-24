@@ -56,19 +56,23 @@ def test_worker_group_exists(region_name, cluster_name, worker_group_name):
 
 
 def test_test_service_response(test_service_url, max_retries=6, retry_delay=10):
-    if not test_service_url.startswith(("http://", "https://")):
-        test_service_url = f"http://{test_service_url}"
+    # Force test_service_url to start with http://
+    if test_service_url.startswith("https://"):
+        test_service_url = "http://" + test_service_url[8:]
 
     for attempt in range(1, max_retries + 1):
         try:
-            response = requests.get(test_service_url)
+            response = requests.get(test_service_url, allow_redirects=True)
             assert (
                 response.status_code == 200
             ), f"Test service returned a {response.status_code} status code"
             assert (
+                response.url.startswith("https://")
+            ), f"Test service did not redirect to HTTPS: {response.url}"
+            assert (
                 "It works!" in response.text
             ), f"Test service returned: {response.text}"
-            print("Test service returned a 200 status code and 'It works!'")
+            print("Test service returned a 200 status code, 'It works!', and redirected to HTTPS")
             break
         except Exception as e:
             if attempt == max_retries:

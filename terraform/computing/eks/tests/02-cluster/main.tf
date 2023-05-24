@@ -1,9 +1,10 @@
 locals {
   externaldns_provider = {
-    name = "cloudflare"
+    name = "aws"
     config = {
-      "cloudflare.apiToken" = var.cloudflare_apitoken
-      "cloudflare.zone"     = "familleducret.net"
+      "aws.zoneType"     = "public"
+      "txtOwnerId"       = "Z07480952D5MIKMEVW96O"
+      "domainFilters[0]" = "test.familleducret.net"
     }
   }
 }
@@ -25,9 +26,9 @@ module "cluster" {
   eks_public_access  = true
 
   externaldns_provider_settings = {
-    provider              = "cloudflare"
-    "cloudflare.apiToken" = var.cloudflare_apitoken
-    "cloudflare.zone"     = "familleducret.net"
+    provider     = "aws"
+    txtOwnerId   = "Z07480952D5MIKMEVW96O"
+    aws_zoneType = "public"
   }
 
   vpc_id = data.terraform_remote_state.network.outputs.vpc_id
@@ -52,3 +53,4 @@ output "aws_eks_cluster_kubeconfig_ca_data" {
 output "name" {
   value = module.cluster.name
 }
+
