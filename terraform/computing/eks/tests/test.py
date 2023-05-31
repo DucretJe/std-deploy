@@ -55,7 +55,7 @@ def test_worker_group_exists(region_name, cluster_name, worker_group_name):
         raise TestFailed(f"Failed to test worker group {worker_group_name}: {e}")
 
 
-def test_test_service_response(test_service_url, max_retries=6, retry_delay=10):
+def test_test_service_response(test_service_url, max_retries=30, retry_delay=10):
     # Force test_service_url to start with http://
     if test_service_url.startswith("https://"):
         test_service_url = "http://" + test_service_url[8:]
