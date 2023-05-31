@@ -1,14 +1,3 @@
-locals {
-  externaldns_provider = {
-    name = "aws"
-    config = {
-      "aws.zoneType"     = "public"
-      "txtOwnerId"       = "Z07480952D5MIKMEVW96O"
-      "domainFilters[0]" = "test.familleducret.net"
-    }
-  }
-}
-
 module "cluster" {
   source = "../../aws/"
 
