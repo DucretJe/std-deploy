@@ -60,6 +60,7 @@ def test_url_resolves(test_service_url, max_retries=60, retry_delay=20):
     if test_service_url.startswith("https://"):
         test_service_url = test_service_url[8:]
 
+    print(f"Trying to resolve URL {test_service_url}")
     for attempt in range(1, max_retries + 1):
         try:
             socket.gethostbyname(test_service_url)
@@ -73,7 +74,7 @@ def test_url_resolves(test_service_url, max_retries=60, retry_delay=20):
                 time.sleep(retry_delay)
 
 
-def test_test_service_response(test_service_url, max_retries=60, retry_delay=20):
+def test_test_service_response(test_service_url, max_retries=5, retry_delay=20):
     # Force test_service_url to start with http://
     if test_service_url.startswith("https://"):
         test_service_url = "http://" + test_service_url[8:]
@@ -82,7 +83,7 @@ def test_test_service_response(test_service_url, max_retries=60, retry_delay=20)
         try:
             # Refresh DNS cache
             socket.getaddrinfo(test_service_url, 80)
-
+            print("Testing %s" % test_service_url)
             response = requests.get(test_service_url, allow_redirects=True)
             assert (
                 response.status_code == 200
