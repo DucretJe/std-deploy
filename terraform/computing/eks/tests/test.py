@@ -81,9 +81,6 @@ def test_test_service_response(test_service_url, max_retries=5, retry_delay=20):
 
     for attempt in range(1, max_retries + 1):
         try:
-            # Refresh DNS cache
-            socket.getaddrinfo(test_service_url, 80)
-            print("Testing %s" % test_service_url)
             response = requests.get(test_service_url, allow_redirects=True)
             assert (
                 response.status_code == 200
