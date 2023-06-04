@@ -19,5 +19,4 @@ jobs:
         fail_on: high,medium
         output_path: results-dir
         token: ${{ secrets.GITHUB_TOKEN }}
-        ignore_on_exit: results
         enable_comments: true
