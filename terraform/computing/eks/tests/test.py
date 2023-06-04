@@ -1,5 +1,7 @@
 import argparse
+import socket
 import time
+
 
 import boto3
 import requests
@@ -62,6 +64,9 @@ def test_test_service_response(test_service_url, max_retries=30, retry_delay=10)
 
     for attempt in range(1, max_retries + 1):
         try:
+            # Refresh DNS cache
+            socket.getaddrinfo(test_service_url, 80)
+
             response = requests.get(test_service_url, allow_redirects=True)
             assert (
                 response.status_code == 200
