@@ -2,7 +2,6 @@ import argparse
 import socket
 import time
 
-
 import boto3
 import requests
 from botocore.exceptions import ClientError

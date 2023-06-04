@@ -16,6 +16,6 @@ jobs:
         path: /
         fail_on: high,medium
         token: ${{ secrets.GITHUB_TOKEN }}
-        output_path: myResults/
+        output_path: /
         ignore_on_exit: results
         enable_comments: true
