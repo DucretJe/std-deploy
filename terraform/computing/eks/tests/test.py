@@ -56,7 +56,24 @@ def test_worker_group_exists(region_name, cluster_name, worker_group_name):
         raise TestFailed(f"Failed to test worker group {worker_group_name}: {e}")
 
 
-def test_test_service_response(test_service_url, max_retries=30, retry_delay=10):
+def test_url_resolves(test_service_url, max_retries=60, retry_delay=20):
+    if test_service_url.startswith("https://"):
+        test_service_url = test_service_url[8:]
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            socket.gethostbyname(test_service_url)
+            print(f"URL {test_service_url} resolves")
+            break
+        except socket.gaierror:
+            if attempt == max_retries:
+                raise TestFailed(f"Failed to resolve URL {test_service_url}")
+            else:
+                print(f"Attempt {attempt} failed. Retrying in {retry_delay} seconds...")
+                time.sleep(retry_delay)
+
+
+def test_test_service_response(test_service_url, max_retries=60, retry_delay=20):
     # Force test_service_url to start with http://
     if test_service_url.startswith("https://"):
         test_service_url = "http://" + test_service_url[8:]
@@ -108,6 +125,7 @@ if __name__ == "__main__":
             test_worker_group_exists,
             [args.region, args.cluster_name, args.worker_group_name],
         ),
+        (test_url_resolves, [args.test_service_url]),
         (test_test_service_response, [args.test_service_url]),
     ]
 

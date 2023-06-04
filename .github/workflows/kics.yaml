@@ -10,11 +10,14 @@ jobs:
     steps:
     - name: 🛎️ Checkout
       uses: actions/checkout@v3
+    - name: 🪄 Mkdir results-dir
+      run: mkdir -p results-dir
     - name: 📡 run kics Scan
       uses: checkmarx/kics-github-action@v1.7.0
       with:
-        path: /
+        path: terraform/
         fail_on: high,medium
+        output_path: results-dir
         token: ${{ secrets.GITHUB_TOKEN }}
         ignore_on_exit: results
         enable_comments: true
