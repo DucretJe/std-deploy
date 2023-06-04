@@ -33,7 +33,8 @@ test: check_env
 	terraform init -upgrade && \
 	terraform validate && \
 	terraform plan -out=plan  && \
-	terraform show -json plan > plan.json && \
+	terraform show -json plan > ../plan.json && \
+	rm plan && \
 	terraform apply --auto-approve && \
 	cd ../03-deployment && \
 	terraform init -upgrade && \
