@@ -62,7 +62,7 @@ def test_autoscaling_group_exists(region_name, autoscaling_group_id):
 def test_url_status_code(url, retries=10, delay=5):
     for attempt in range(retries):
         try:
-            response = requests.get(f"http://{url}:80")
+            response = requests.get(f"https://{url}:443")
             if response.status_code == 200:
                 break
         except requests.exceptions.RequestException:
@@ -70,7 +70,7 @@ def test_url_status_code(url, retries=10, delay=5):
 
         if attempt == retries - 1:
             raise TestFailed(
-                f"Failed to make request to http://{url}:80 after {retries} retries"
+                f"Failed to make request to https://{url}:443 after {retries} retries"
             )
 
         time.sleep(delay)
