@@ -179,12 +179,6 @@ variable "launch_template_network_interfaces_associate_public_ip_address" {
   default     = false
 }
 
-variable "lb_internal" {
-  description = "Whether the load balancer is internal."
-  type        = bool
-  default     = false
-}
-
 variable "lb_name" {
   description = "The name to use for the load balancer."
   type        = string
@@ -193,12 +187,6 @@ variable "lb_name" {
     condition     = length(var.lb_name) > 0
     error_message = "The load balancer name must not be empty."
   }
-}
-
-variable "lb_tg_certificate_arn" {
-  description = "The arn of the certificate to use for the load balancer."
-  type        = string
-  default     = ""
 }
 
 variable "lb_tg_health_check_path" {
