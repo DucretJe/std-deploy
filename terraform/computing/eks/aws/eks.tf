@@ -1,3 +1,54 @@
+resource "aws_kms_key" "eks_cluster_key" {
+  description = "KMS key for EKS cluster encryption"
+
+  enable_key_rotation = true
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "Enable IAM User Permissions"
+        Effect = "Allow"
+        Principal = {
+          AWS = aws_iam_role.eks_role.arn
+        }
+        Action = [
+          "kms:Create*",
+          "kms:Describe*",
+          "kms:Enable*",
+          "kms:List*",
+          "kms:Put*",
+          "kms:Update*",
+          "kms:Revoke*",
+          "kms:Disable*",
+          "kms:Get*",
+          "kms:Delete*",
+          "kms:TagResource",
+          "kms:UntagResource",
+          "kms:ScheduleKeyDeletion",
+          "kms:CancelKeyDeletion"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid    = "Allow EKS Cluster to Use Key"
+        Effect = "Allow"
+        Principal = {
+          Service = "eks.amazonaws.com"
+        }
+        Action = [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*",
+          "kms:Describe*"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 resource "aws_eks_cluster" "this" {
   name     = var.eks_cluster_name
   role_arn = aws_iam_role.eks_role.arn
@@ -10,6 +61,15 @@ resource "aws_eks_cluster" "this" {
       aws_security_group.eks.id,
       aws_security_group.worker_nodes.id,
     ]
+  }
+
+  encryption_config {
+    resources = [
+      "secrets",
+    ]
+    provider {
+      key_arn = aws_kms_key.eks_cluster_key.arn
+    }
   }
 
   enabled_cluster_log_types = [
