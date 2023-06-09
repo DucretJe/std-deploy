@@ -13,7 +13,7 @@ jobs:
     - name: 🪄 Mkdir results-dir
       run: mkdir -p results-dir
     - name: 📡 run kics Scan
-      uses: checkmarx/kics-github-action@v1.7.0
+      uses: checkmarx/kics-github-action@v1.7.1
       with:
         path: terraform/
         fail_on: high,medium

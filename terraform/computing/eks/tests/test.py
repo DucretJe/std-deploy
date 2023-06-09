@@ -69,9 +69,21 @@ def test_url_resolves(test_service_url, max_retries=60, retry_delay=20):
             break
         except dns.resolver.NXDOMAIN:
             if attempt == max_retries:
-                raise Exception(f"Failed to resolve URL {test_service_url}")
+                raise Exception(
+                    f"Failed to resolve URL {test_service_url} after {max_retries} attempts."
+                )
             else:
                 print(f"Attempt {attempt} failed. Retrying in {retry_delay} seconds...")
+                time.sleep(retry_delay)
+        except dns.resolver.NoAnswer:
+            if attempt == max_retries:
+                raise Exception(
+                    f"DNS response does not contain an answer to the question for URL {test_service_url} after {max_retries} attempts."
+                )
+            else:
+                print(
+                    f"Attempt {attempt} failed due to NoAnswer. Retrying in {retry_delay} seconds..."
+                )
                 time.sleep(retry_delay)
 
 
