@@ -1,5 +1,5 @@
 import argparse
-import socket
+import dns.resolver
 import time
 
 import boto3
@@ -63,12 +63,13 @@ def test_url_resolves(test_service_url, max_retries=60, retry_delay=20):
     print(f"Trying to resolve URL {test_service_url}")
     for attempt in range(1, max_retries + 1):
         try:
-            socket.gethostbyname(test_service_url)
-            print(f"URL {test_service_url} resolves")
+            answers = dns.resolver.query(test_service_url, "A")
+            for rdata in answers:
+                print(f"URL {test_service_url} resolves to IP {rdata.address}")
             break
-        except socket.gaierror:
+        except dns.resolver.NXDOMAIN:
             if attempt == max_retries:
-                raise TestFailed(f"Failed to resolve URL {test_service_url}")
+                raise Exception(f"Failed to resolve URL {test_service_url}")
             else:
                 print(f"Attempt {attempt} failed. Retrying in {retry_delay} seconds...")
                 time.sleep(retry_delay)

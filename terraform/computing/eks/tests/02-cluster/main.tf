@@ -11,8 +11,9 @@ module "cluster" {
     "k8s.io/cluster-autoscaler/enabled"                                                         = "true"
   }
 
-  eks_private_access = true
-  eks_public_access  = true
+  eks_private_access     = true
+  eks_public_access      = true
+  eks_public_access_cidr = ["${data.local_file.ip.content}/32"]
 
   externaldns_provider_settings = {
     provider     = "aws"
@@ -43,3 +44,19 @@ output "name" {
   value = module.cluster.name
 }
 
+resource "null_resource" "get_runner_ip" {
+  provisioner "local-exec" {
+    command     = "curl -s https://ifconfig.me/ip > temp.txt"
+    interpreter = ["/bin/bash", "-c"]
+    environment = {
+      # Set the HTTP_PROXY and HTTPS_PROXY environment variables if you need to use a proxy to access the internet.
+      # http_proxy = "http://proxy.example.com:8080"
+      # https_proxy = "http://proxy.example.com:8080"
+    }
+  }
+}
+
+data "local_file" "ip" {
+  depends_on = [null_resource.get_runner_ip]
+  filename   = "${path.module}/temp.txt"
+}

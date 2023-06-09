@@ -1,4 +1,5 @@
 resource "kubernetes_service_account" "externaldns" {
+  automount_service_account_token = true
   metadata {
     name      = "external-dns"
     namespace = "kube-system"
@@ -7,6 +8,19 @@ resource "kubernetes_service_account" "externaldns" {
     }
   }
 }
+
+resource "kubernetes_secret" "externaldns_secret" {
+  type = "kubernetes.io/service-account-token"
+  metadata {
+    name      = "externaldns-token"
+    namespace = "kube-system"
+    annotations = {
+      "kubernetes.io/service-account.name" = kubernetes_service_account.externaldns.metadata.0.name
+    }
+  }
+  depends_on = [kubernetes_service_account.externaldns]
+}
+
 
 
 resource "helm_release" "externaldns" {

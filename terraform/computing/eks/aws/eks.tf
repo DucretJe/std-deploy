@@ -44,6 +44,15 @@ resource "aws_kms_key" "eks_cluster_key" {
           "kms:Describe*"
         ]
         Resource = "*"
+      },
+      {
+        Sid    = "AllowKeyPolicyModification"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        }
+        Action   = "kms:*"
+        Resource = "*"
       }
     ]
   })
@@ -57,6 +66,7 @@ resource "aws_eks_cluster" "this" {
     subnet_ids              = local.subnet_ids
     endpoint_private_access = var.eks_private_access
     endpoint_public_access  = var.eks_public_access
+    public_access_cidrs     = var.eks_public_access_cidr
     security_group_ids = [
       aws_security_group.eks.id,
       aws_security_group.worker_nodes.id,

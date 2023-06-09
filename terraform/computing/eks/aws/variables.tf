@@ -26,6 +26,12 @@ variable "eks_private_access" {
   default     = false
 }
 
+variable "eks_public_access_cidr" {
+  description = "The CIDR block to use for the EKS cluster public access"
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}
+
 variable "eks_public_access" {
   description = "Indicates whether or not the EKS cluster has public access"
   type        = bool
