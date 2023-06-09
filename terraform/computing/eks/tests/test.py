@@ -1,8 +1,8 @@
 import argparse
-import dns.resolver
 import time
 
 import boto3
+import dns.resolver
 import requests
 from botocore.exceptions import ClientError
 

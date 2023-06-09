@@ -15,7 +15,7 @@ resource "kubernetes_secret" "externaldns_secret" {
     name      = "externaldns-token"
     namespace = "kube-system"
     annotations = {
-      "kubernetes.io/service-account.name" = kubernetes_service_account.externaldns.metadata.0.name
+      "kubernetes.io/service-account.name" = kubernetes_service_account.externaldns.metadata[0].name
     }
   }
   depends_on = [kubernetes_service_account.externaldns]
