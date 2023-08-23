@@ -10,6 +10,18 @@ variable "create_private_subnet" {
   default     = false
 }
 
+variable "private_subnet_tags" {
+  description = "A map of tags to assign to the subnets"
+  type        = map(string)
+  default     = {}
+}
+
+variable "public_subnet_tags" {
+  description = "A map of tags to assign to the subnets"
+  type        = map(string)
+  default     = {}
+}
+
 variable "sg_description" {
   description = "The description of the security group"
   type        = string
@@ -62,12 +74,6 @@ variable "subnet_map_public_ip_on_launch" {
   description = "A boolean flag to enable/disable public IP on launch for the subnets"
   type        = bool
   default     = false
-}
-
-variable "subnet_tags" {
-  description = "A map of tags to assign to the subnets"
-  type        = map(string)
-  default     = {}
 }
 
 variable "vpc_cidr" {

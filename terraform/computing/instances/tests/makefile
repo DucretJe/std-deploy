@@ -42,7 +42,7 @@ test: check_env
 	pip install -r requirements.txt && \
 	python3 test.py --region ${AWS_REGION} --launch-template-id $$(cd 02-instances && terraform output aws_launch_template_id | sed 's/"//g') \
 	--autoscaling-group-id $$(cd 02-instances && terraform output aws_autoscaling_group_id | sed 's/"//g') \
-	--url $$(cd 02-instances && terraform output aws_load_balancer_dns_name | sed 's/"//g') && \
+	--url $$(cd 02-instances && terraform output url | sed 's/"//g') && \
 	cd 02-instances && \
 	terraform destroy --auto-approve && \
 	cd ../01-network && \

@@ -179,12 +179,6 @@ variable "launch_template_network_interfaces_associate_public_ip_address" {
   default     = false
 }
 
-variable "lb_internal" {
-  description = "Whether the load balancer is internal."
-  type        = bool
-  default     = false
-}
-
 variable "lb_name" {
   description = "The name to use for the load balancer."
   type        = string
@@ -218,7 +212,7 @@ variable "lb_tg_health_check_protocol" {
 variable "lb_tg_port" {
   description = "The port to use for the load balancer."
   type        = number
-  default     = 80
+  default     = 443
   validation {
     condition     = var.lb_tg_port > 0 && var.lb_tg_port <= 65535
     error_message = "The port must be between 1 and 65535."
@@ -232,16 +226,6 @@ variable "lb_tg_prefix_name" {
   validation {
     condition     = length(var.lb_tg_prefix_name) > 0
     error_message = "The prefix name must not be empty."
-  }
-}
-
-variable "lb_tg_protocol" {
-  description = "The protocol to use for the load balancer."
-  type        = string
-  default     = "HTTP"
-  validation {
-    condition     = length(var.lb_tg_protocol) > 0
-    error_message = "The protocol must not be empty."
   }
 }
 
@@ -273,6 +257,18 @@ variable "on_demand_base_capacity" {
     condition     = var.on_demand_base_capacity >= 0
     error_message = "The on demand base capacity must be greater than or equal to 0."
   }
+}
+
+variable "route53_hosted_zone_id" {
+  description = "The hosted zone id to use for the route53 record."
+  type        = string
+  default     = ""
+}
+
+variable "route53_uri" {
+  description = "The uri to use for the route53 record."
+  type        = string
+  default     = ""
 }
 
 variable "security_groups" {
@@ -332,5 +328,15 @@ variable "vpc_id" {
   validation {
     condition     = length(var.vpc_id) > 0
     error_message = "The VPC ID must not be empty."
+  }
+}
+
+variable "waf_name" {
+  description = "The name to use for the waf."
+  type        = string
+  default     = "tfWebACL"
+  validation {
+    condition     = length(var.waf_name) > 0
+    error_message = "The waf name must not be empty."
   }
 }

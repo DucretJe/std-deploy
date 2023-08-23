@@ -3,6 +3,7 @@
 **/.terraform.lock.hcl
 *.tfstate
 *.tfstate.*
+**/secrets.tfvars
 
 # Python
 .venv

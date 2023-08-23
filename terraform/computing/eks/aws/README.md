@@ -11,6 +11,13 @@ This can be changed with the following variables (bools):
 
 > ⚠️ A private EKS endpoint will prevent Terraform from deploy directly in the cluster since the API will be in a private zone therefor not reachable from internet.
 
+## External DNS
+
+TODO
+
+* [ ] Migrate to AWS
+* [ ] Write documentation
+
 ## How to
 
 ### Test

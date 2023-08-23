@@ -1,5 +1,5 @@
 module "cluster" {
-  source = "../../aws/"
+  source = "../../../computing/eks/aws/"
 
   eks_cluster_name                = data.terraform_remote_state.network.outputs.eks_cluster_name
   eks_cluster_public_subnets_ids  = data.terraform_remote_state.network.outputs.public_subnet_ids
@@ -11,15 +11,8 @@ module "cluster" {
     "k8s.io/cluster-autoscaler/enabled"                                                         = "true"
   }
 
-  eks_private_access     = true
-  eks_public_access      = true
-  eks_public_access_cidr = ["${data.local_file.ip.content}/32"]
-
-  externaldns_provider_settings = {
-    provider     = "aws"
-    txtOwnerId   = "Z07480952D5MIKMEVW96O"
-    aws_zoneType = "public"
-  }
+  eks_private_access = false
+  eks_public_access  = true
 
   vpc_id = data.terraform_remote_state.network.outputs.vpc_id
 }
@@ -42,21 +35,4 @@ output "aws_eks_cluster_kubeconfig_ca_data" {
 
 output "name" {
   value = module.cluster.name
-}
-
-resource "null_resource" "get_runner_ip" {
-  provisioner "local-exec" {
-    command     = "curl -s https://ifconfig.me/ip > temp.txt"
-    interpreter = ["/bin/bash", "-c"]
-    environment = {
-      # Set the HTTP_PROXY and HTTPS_PROXY environment variables if you need to use a proxy to access the internet.
-      # http_proxy = "http://proxy.example.com:8080"
-      # https_proxy = "http://proxy.example.com:8080"
-    }
-  }
-}
-
-data "local_file" "ip" {
-  depends_on = [null_resource.get_runner_ip]
-  filename   = "${path.module}/temp.txt"
 }

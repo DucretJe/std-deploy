@@ -50,7 +50,7 @@ test: check_env
 	--subnet-ids $$(cd 01-network && terraform output public_subnet_ids | sed 's/"//g') \
 	--cluster-name $$(cd 02-cluster && terraform output name | sed 's/"//g' ) \
 	--worker-group-name $$(cd 02-cluster && terraform output name | sed 's/"//g' ) \
-	--test-service-url $$(cd 03-deployment && terraform output nginx_service | sed 's/"//g' ) && \
+	--test-service-url $$(cd 03-deployment && terraform output url | sed 's/"//g' ) && \
 	cd 03-deployment && \
 	terraform destroy --auto-approve && \
 	cd ../02-cluster && \

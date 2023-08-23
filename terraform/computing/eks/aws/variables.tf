@@ -26,6 +26,12 @@ variable "eks_private_access" {
   default     = false
 }
 
+variable "eks_public_access_cidr" {
+  description = "The CIDR block to use for the EKS cluster public access"
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}
+
 variable "eks_public_access" {
   description = "Indicates whether or not the EKS cluster has public access"
   type        = bool
@@ -88,6 +94,11 @@ variable "eks_workers_min_capacity" {
   description = "The minimum number of workers to use for the EKS cluster"
   type        = number
   default     = 1
+}
+
+variable "externaldns_provider_settings" {
+  description = "The external DNS providers parameters"
+  type        = map(any)
 }
 
 variable "vpc_id" {

@@ -2,6 +2,7 @@ import argparse
 import time
 
 import boto3
+import dns.resolver
 import requests
 from botocore.exceptions import ClientError
 
@@ -55,20 +56,58 @@ def test_worker_group_exists(region_name, cluster_name, worker_group_name):
         raise TestFailed(f"Failed to test worker group {worker_group_name}: {e}")
 
 
-def test_test_service_response(test_service_url, max_retries=6, retry_delay=10):
-    if not test_service_url.startswith(("http://", "https://")):
-        test_service_url = f"http://{test_service_url}"
+def test_url_resolves(test_service_url, max_retries=60, retry_delay=20):
+    if test_service_url.startswith("https://"):
+        test_service_url = test_service_url[8:]
+
+    print(f"Trying to resolve URL {test_service_url}")
+    for attempt in range(1, max_retries + 1):
+        try:
+            answers = dns.resolver.query(test_service_url, "A")
+            for rdata in answers:
+                print(f"URL {test_service_url} resolves to IP {rdata.address}")
+            break
+        except dns.resolver.NXDOMAIN:
+            if attempt == max_retries:
+                raise Exception(
+                    f"Failed to resolve URL {test_service_url} after {max_retries} attempts."
+                )
+            else:
+                print(f"Attempt {attempt} failed. Retrying in {retry_delay} seconds...")
+                time.sleep(retry_delay)
+        except dns.resolver.NoAnswer:
+            if attempt == max_retries:
+                raise Exception(
+                    f"DNS response does not contain an answer to the question for URL {test_service_url} "
+                    f"after {max_retries} attempts."
+                )
+            else:
+                print(
+                    f"Attempt {attempt} failed due to NoAnswer. Retrying in {retry_delay} seconds..."
+                )
+                time.sleep(retry_delay)
+
+
+def test_test_service_response(test_service_url, max_retries=5, retry_delay=20):
+    # Force test_service_url to start with http://
+    if test_service_url.startswith("https://"):
+        test_service_url = "http://" + test_service_url[8:]
 
     for attempt in range(1, max_retries + 1):
         try:
-            response = requests.get(test_service_url)
+            response = requests.get(test_service_url, allow_redirects=True)
             assert (
                 response.status_code == 200
             ), f"Test service returned a {response.status_code} status code"
+            assert response.url.startswith(
+                "https://"
+            ), f"Test service did not redirect to HTTPS: {response.url}"
             assert (
                 "It works!" in response.text
             ), f"Test service returned: {response.text}"
-            print("Test service returned a 200 status code and 'It works!'")
+            print(
+                "Test service returned a 200 status code, 'It works!', and redirected to HTTPS"
+            )
             break
         except Exception as e:
             if attempt == max_retries:
@@ -98,6 +137,7 @@ if __name__ == "__main__":
             test_worker_group_exists,
             [args.region, args.cluster_name, args.worker_group_name],
         ),
+        (test_url_resolves, [args.test_service_url]),
         (test_test_service_response, [args.test_service_url]),
     ]
 

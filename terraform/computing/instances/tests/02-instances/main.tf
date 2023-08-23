@@ -1,3 +1,7 @@
+locals {
+  service_fqdn = "instance-test.test.familleducret.net"
+}
+
 module "instances" {
   source = "../../aws/"
 
@@ -11,11 +15,13 @@ module "instances" {
   launch_template_instance_type                                  = "t2.micro"
   launch_template_name_prefix                                    = "ltmplt"
   launch_template_network_interfaces_associate_public_ip_address = true
+  route53_uri                                                    = local.service_fqdn
+  route53_hosted_zone_id                                         = "test.familleducret.net"
   security_groups = [
     data.terraform_remote_state.network.outputs.sg_id
   ]
   ami_filters = {
-    name = ["bitnami-nginx-1.23.3-21-r20-linux-debian-11-x86_64-hvm-ebs-nami-*"]
+    name = ["bitnami-nginx-1.23.3-21-*"]
   }
   spot_max_price = "0.004"
   ssh_keys       = [data.http.ssh_keys.body]
@@ -44,4 +50,8 @@ output "aws_load_balancer_dns_name" {
 
 data "http" "ssh_keys" {
   url = "https://github.com/ducretje.keys"
+}
+
+output "url" {
+  value = local.service_fqdn
 }

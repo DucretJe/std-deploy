@@ -7,7 +7,7 @@ resource "random_id" "id" {
 }
 
 module "network" {
-  source = "../../../../network/aws/"
+  source = "../../../network/aws/"
 
   create_private_subnet = true
   create_public_subnet  = true
@@ -25,15 +25,10 @@ module "network" {
   sg_ingress_rules = []
   sg_name          = "priv-sg"
 
-  private_subnet_tags = {
-    "kubernetes.io/cluster/${local.eks_cluster_name}" = "shared"
-    "kubernetes.io/role/internal-elb"                 = "1"
-  }
-  public_subnet_tags = {
+  subnet_tags = {
     "kubernetes.io/cluster/${local.eks_cluster_name}" = "shared"
     "kubernetes.io/role/elb"                          = "1"
   }
-
   subnet_map_public_ip_on_launch = true
 
   vpc_cidr          = "10.0.0.0/16"
