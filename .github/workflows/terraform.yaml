@@ -17,7 +17,7 @@ jobs:
       all_changed_files: ${{ steps.changed_files.outputs.all_changed_files }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Detect Changed Files
         uses: tj-actions/changed-files@v37
@@ -34,7 +34,7 @@ jobs:
         }}
     steps:
       - name: 🛎️ Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: ⚙️ Setup Infracost
         uses: infracost/actions/setup@v2
@@ -93,7 +93,7 @@ jobs:
         }}
     steps:
       - name: 🛎️ Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: ⚙️ Setup Infracost
         uses: infracost/actions/setup@v2
@@ -152,7 +152,7 @@ jobs:
         }}
     steps:
       - name: 🛎️ Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: ⚙️ Setup Infracost
         uses: infracost/actions/setup@v2
