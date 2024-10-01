@@ -12,7 +12,7 @@ concurrency: ci-${{ github.ref }}
 jobs:
   detect-change:
     name: 🕵️ Change Detection
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     outputs:
       all_changed_files: ${{ steps.changed_files.outputs.all_changed_files }}
     steps:
@@ -25,7 +25,7 @@ jobs:
 
   network:
     name: 🕸️ Network
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: detect-change
     if: ${{ contains(
           needs.detect-change.outputs.all_changed_files,
@@ -85,7 +85,7 @@ jobs:
 
   compute-instances:
     name: 🖥️ Compute Instances
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: detect-change
     if: ${{ contains(
           needs.detect-change.outputs.all_changed_files, 
@@ -144,7 +144,7 @@ jobs:
 
   compute-eks:
     name: 🍇 Compute EKS
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: detect-change
     if: ${{ contains(
           needs.detect-change.outputs.all_changed_files, 
